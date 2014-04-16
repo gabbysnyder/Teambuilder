@@ -1,0 +1,42 @@
+/* Desktop Interface */
+@media (min-width: 768px) {
+  body {
+    padding-top: 60px; /* 60px to make the container go all the way to the  bottom of the topbar */
+  }
+
+  p {
+    -webkit-margin-before: 0em;
+    -webkit-margin-after: 0em;
+    margin: 0px;
+  }
+
+  h3 {
+    line-height: 30px;
+    -webkit-margin-before: 0em;
+    -webkit-margin-after: 0em;
+  }
+
+  #damageInfo {
+    text-align: center;
+    overflow: hidden;
+  }
+
+  #infobox {
+    
+  }
+
+  #moveTotals label {
+    display: inline;
+    padding: 0 10px;
+    text-transform: capitalize;
+  }
+
+  #calcContainer {
+    padding-top: 30px;
+  }
+
+  #moreToggles {
+    padding-top: 10px;
+  }
+
+}

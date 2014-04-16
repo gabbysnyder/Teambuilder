@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type='text/javascript' src="js/jquery.min.js"></script>
+  <script type='text/javascript' src="js/jquery-ui.js"></script>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <link href="css/jquery-ui.css" rel="stylesheet" type="text/css" />
+  <link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
+  <link href="css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
+  <script src="js/bootstrap.js"></script>
+  <!-- Pokedex data scripts: -->
+  <script type='text/javascript' src='data/pokedex.js' defer="defer"></script>
+  <script type='text/javascript' src='data/items.js' defer="defer"></script>
+  <script type='text/javascript' src='data/learnsets.js' defer="defer"></script>
+  <script type='text/javascript' src='data/moves.js' defer="defer"></script>
+
+  <!-- local stuff -->
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <script src="ivcalculator.js"></script>
+
+  <meta charset=utf-8 />
+  <title>JTK's Stat Calculator</title>
+</head>
+<body>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="brand" href="#">Stat Calc</a>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+  </div>
+
+    <div id="eggCalc_parents" class="row-fluid">
+      <!-- ...mother! -->
+      <div id="mother" class="span5 offset1">
+        <h3 class="span11">
+          <p>Mother's IVs:</p>
+          <small>Please ensure the mother is holding an Everstone.</small>
+        </h3>
+<!--         <input id="pokemon" type="text" class="span11" placeholder="Choose a Pokemon!">
+        <!-- Hidden until selected 
+        <div id="infobox">
+          <span id="number" class="span1"></span>
+          <span id="name" class="span9">Pokemon name</span>
+            <button id="close" class="span1 close" style="margin-top: -9px; float: right;">&times;</button>
+        </div>  -->
+        <!-- IV boxes -->
+        <input id="hpIV" type="text" class="span2" placeholder="HP" disabled>
+        <input id="atkIV" type="text" class="span2" placeholder="Atk" disabled>
+        <input id="defIV" type="text" class="span2" placeholder="Def" disabled>
+        <input id="spatkIV" type="text" class="span2" placeholder="SpAtk" disabled>
+        <input id="spdefIV" type="text" class="span2" placeholder="SpDef" disabled>
+        <input id="spdIV" type="text" class="span2" placeholder="Spd" disabled>
+      </div>
+
+      <div id="father" class="span5">
+        <h3 class="span11">
+          <p>Father's IVs:</p>
+          <small>Please ensure the father is holding a Destiny Knot.</small>
+        </h3>
+<!--         <input id="pokemon" type="text" class="span11" placeholder="Choose a Pokemon!">
+        <!-- Hidden until selected 
+        <div id="infobox">
+          <span id="number" class="span1"></span>
+          <span id="name" class="span9">Pokemon name</span>
+            <button id="close" class="span1 close" style="margin-top: -9px; float: right;">&times;</button>
+        </div>  -->
+        <!-- IV boxes -->
+        <input id="hpIV" type="text" class="span2" placeholder="HP" disabled>
+        <input id="atkIV" type="text" class="span2" placeholder="Atk" disabled>
+        <input id="defIV" type="text" class="span2" placeholder="Def" disabled>
+        <input id="spatkIV" type="text" class="span2" placeholder="SpAtk" disabled>
+        <input id="spdefIV" type="text" class="span2" placeholder="SpDef" disabled>
+        <input id="spdIV" type="text" class="span2" placeholder="Spd" disabled>
+      </div>
+    </div> <!-- /container -->
+
+    <div class="row-fluid">
+      <h3 class="offset1" style="margin-top: 15px; margin-bottom: 15px;">Child information:</h3>
+    </div>
+
+    <div id="eggCalc_child" class="row-fluid">
+      <input id="pokemon" type="text" class="span10 offset1" placeholder="Choose a Pokemon!">
+        <!-- Hidden until selected -->
+<!--         <div id="infobox" class="span10 offset1">
+          <span id="number" class="span1">#339</span>
+          <span id="name" class="span9">Pokemon name</span>
+            <button id="close" class="span1 close" style="margin-top: -9px; float: right;">&times;</button>
+        </div> -->
+
+        <!-- Image column -->
+        <div id="img" class="span2"></div>
+
+        <div id="stats" class="span9">
+          <h4 class="span12">Stats:</h4>
+          <div id="statRow">
+            <input id="level" type="text" class="span2" placeholder="Level" disabled>
+            <div class="span9" style="float: right">
+              <input id="hpStat" type="text" class="span2" placeholder="HP" disabled>
+              <input id="atkStat" type="text" class="span2" placeholder="Atk" disabled>
+              <input id="defStat" type="text" class="span2" placeholder="Def" disabled>
+              <input id="spatkStat" type="text" class="span2" placeholder="SpAtk" disabled>
+              <input id="spdefStat" type="text" class="span2" placeholder="SpDef" disabled>
+              <input id="spdStat" type="text" class="span2" placeholder="Spd" disabled>
+            </div>
+            <!-- Add new row -->
+            <a href="" style="display: inline-block; vertical-align: top;">Add new row</a>
+
+
+          </div>
+
+          <div id="evRow">
+            <h4 class="span12" style="margin-left: 0;">Known EVs:</h4>
+            <input id="hpEV" type="text" class="span2" placeholder="HP" disabled>
+            <input id="atkEV" type="text" class="span2" placeholder="Atk" disabled>
+            <input id="defEV" type="text" class="span2" placeholder="Def" disabled>
+            <input id="spatkEV" type="text" class="span2" placeholder="SpAtk" disabled>
+            <input id="spdefEV" type="text" class="span2" placeholder="SpDef" disabled>
+            <input id="spdEV" type="text" class="span2" placeholder="Spd" disabled>
+          </div>
+        </div>
+    </div> <!-- /container -->    
+
+    <div id="eggCalc_results" class="row-fluid" style="margin-top: 15px;  vertical-align: middle; height: 100%;">
+      <h3 class="span11 offset1">Results:</h3>
+      <h1 style="text-align: center;"> HP / Atk / Def / Sp. Atk / Sp. Def / Spd </h1>
+    </div> <!-- /container --> 
+
+</body>
