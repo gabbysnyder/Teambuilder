@@ -33,6 +33,7 @@ function fetchPokemon(name) {
 //   - if kyurem (646), w(hite) / b(lack)
 //   - if keldeo (647), r(esolute)
 //   - meloetta (648), p(irouette)
+//   - spiky eared pichu (just do it srsly)
 function parseCurrentURL() {
 	// always load from page, if there's nothing there then we don't care.
 	var currLocation = document.URL;
