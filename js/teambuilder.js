@@ -9,29 +9,47 @@ var weakResist = new Array();
 var weakResistColor = new Array();
 var weakResistMaxLength = 6;
 
-// function that returns a save version of a pokemon's name for pokedex lookup
-function safePkmnName(unsafeName) {
-	unsafeName = unsafeName.toLowerCase();
-	unsafeName = unsafeName.replace(/[\.\s]/g,"");
-	console.log("Safe name: " + unsafeName);
-	return unsafeName;
+// function that returns the pokemon that we're going to look at.
+function fetchPokemon(name) {
+	name = name.toLowerCase();
+	name = name.replace(/[\.\s]/g,"");
+	console.log("name: " + name);
+	return name;
 }
 
 // function to parse URL, trying to get different pokemon for linking capabilities
+// regex for numbers: (\d{3}|\d{2}|\d{1})[hwfsmradtozwbp]?
+// what we need to validate for
+//   - number between 1-719
+//   - if rotom (479), no letter = normal; h, w, f, s, c
+//   - if castform (351), no letter = normal; s(unny), r(ainy), f(rost)
+//   - if deoxys (386), no letter = normal; a(ttack), d(efense), s(peed)
+//   - if  wormadam (413),  no letter = grass; s(andy), t(rash)
+//   - if cherrim (421), no letter = overcast, s(unshine)
+//   - if giratina (487), no letter = altered, o(rigin)
+//   - if shaymin (492), no letter = land, s(ky)
+//   - if darmanitan (555), no letter = standard, z(en)
+//   - if tornadus/thundurus/landorus (641/642/645), t(herian)
+//   - if kyurem (646), w(hite) / b(lack)
+//   - if keldeo (647), r(esolute)
+//   - meloetta (648), p(irouette)
 function parseCurrentURL() {
 	// always load from page, if there's nothing there then we don't care.
 	var currLocation = document.URL;
 	var parArr = currLocation.split("?")[1].split("|");
-	var returnBool = true;
+	console.log(parArr);
 
 	// quit if more than six.
 	if (parArr.length > 6) {
+		console.log("too long");
 		return;
 	}
 
 	// quit if we find non number, invalid number
+	var validPokemonRegex = new RegExp(/(\d{3}|\d{2}|\d{1})([hwfscradtozwbp]?)/);
+	var validFormeRegex = new RegExp(/[hwfscradtozwbp]/);
 	for (var i = 0; i < parArr.length; ++i) {
-	 	if (!$.isNumeric(parArr[i])) {
+	 	if (!parArr[i].match(validPokemonRegex)) {
 	 		return;
 	 	}
 
@@ -41,9 +59,32 @@ function parseCurrentURL() {
 	 		return; // THERE AREN'T THAT MANY POKEMON YET
 	 	}
 
-	 	console.log(pokemon_autocomplete[pkmn]);
-	 	pokemon[i] = pokedex.pokemon[safePkmnName(pokemon_autocomplete[pkmn])];
-	 	console.log(pokemon[i]);
+	 	// time to do some forme magic.
+	 	if (pkmn == 479) { // Rotom
+	 		var forme = parArr[i].match(validFormeRegex);
+	 		console.log("Forme: " + forme);
+
+	 		var name = "rotom";
+	 		if (forme == "h") {
+	 			name += "heat";
+	 		} else if (forme == "w") {
+	 			name += "wash"
+	 		} else if (forme == "f") {
+	 			name += "frost";
+	 		} else if (forme == "s") {
+	 			name += "fan";
+	 		} else if (forme == "c") {
+	 			name += "mow";
+	 		}
+
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
+	 		console.log(pokemon[i]);
+
+	 	} else {
+	 		console.log(pokemon_autocomplete[pkmn]);
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(pokemon_autocomplete[pkmn])];
+	 		console.log(pokemon[i]);
+	 	}
 
 		// update image/textbox accordingly
 		if (pokemon[i]["num"] != undefined) {
