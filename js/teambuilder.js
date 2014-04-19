@@ -9,6 +9,50 @@ var weakResist = new Array();
 var weakResistColor = new Array();
 var weakResistMaxLength = 6;
 
+// function that returns a save version of a pokemon's name for pokedex lookup
+function safePkmnName(unsafeName) {
+	unsafeName = unsafeName.toLowerCase();
+	unsafeName = unsafeName.replace(/[\.\s]/g,"");
+	console.log("Safe name: " + unsafeName);
+	return unsafeName;
+}
+
+// function to parse URL, trying to get different pokemon for linking capabilities
+function parseCurrentURL() {
+	// always load from page, if there's nothing there then we don't care.
+	var currLocation = document.URL;
+	var parArr = currLocation.split("?")[1].split("|");
+	var returnBool = true;
+
+	// quit if more than six.
+	if (parArr.length > 6) {
+		return;
+	}
+
+	// quit if we find non number, invalid number
+	for (var i = 0; i < parArr.length; ++i) {
+	 	if (!$.isNumeric(parArr[i])) {
+	 		return;
+	 	}
+
+	 	var pkmn = parseInt(parArr[i]);
+	 	console.log(pkmn);
+	 	if (pkmn > 719) {
+	 		return; // THERE AREN'T THAT MANY POKEMON YET
+	 	}
+
+	 	console.log(pokemon_autocomplete[pkmn]);
+	 	pokemon[i] = pokedex.pokemon[safePkmnName(pokemon_autocomplete[pkmn])];
+	 	console.log(pokemon[i]);
+
+		// update image/textbox accordingly
+		if (pokemon[i]["num"] != undefined) {
+			$("#pkmn" + (i + 1) + "img").attr("src","media/pokemon/icons/" + pokemon[i]["num"] + ".png");
+		}
+		$("#pkmn" + (i + 1) + "input").val(pokemon[i]["species"]);
+	}
+}
+
 function initializeWeakResist() {
 	for (var i = 0; i < TypeChart.typelookup.length; ++i) {
 		weakResist[i] = new Array();
@@ -158,12 +202,14 @@ function updateTable() {
 }
 
 $(document).ready(function() {
+	parseCurrentURL();
+
 	updateTable();
 
 	$( "#pkmn1input" ).on('input', function() {
     	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[0] != undefined) {
     		pokemon[0] = undefined;
-			$("#pkmn1img").attr("src","/wp-content/themes/destro/images/pokemon/icons/0.png");
+			$("#pkmn1img").attr("src","media/pokemon/icons/0.png");
 			updateTable();
     	}
 	});
@@ -174,7 +220,7 @@ $(document).ready(function() {
 
 			// update image/textbox accordingly
 			if (pokemon[0]["num"] != undefined) {
-				$("#pkmn1img").attr("src","/wp-content/themes/destro/images/pokemon/icons/" + pokemon[0]["num"] + ".png");
+				$("#pkmn1img").attr("src","media/pokemon/icons/" + pokemon[0]["num"] + ".png");
 			}
 			$("#pkmn1input").val(pokemon[0]["species"]);
 			updateTable();
@@ -184,7 +230,7 @@ $(document).ready(function() {
   	$( "#pkmn2input" ).on('input', function() {
     	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[1] != undefined) {
     		pokemon[1] = undefined;
-			$("#pkmn2img").attr("src","/wp-content/themes/destro/images/pokemon/icons/0.png");
+			$("#pkmn2img").attr("src","media/pokemon/icons/0.png");
 			updateTable();
     	}
 	});
@@ -195,7 +241,7 @@ $(document).ready(function() {
 			
 			// update image/textbox accordingly
 			if (pokemon[1]["num"] != undefined) {
-				$("#pkmn2img").attr("src","/wp-content/themes/destro/images/pokemon/icons/" + pokemon[1]["num"] + ".png");
+				$("#pkmn2img").attr("src","media/pokemon/icons/" + pokemon[1]["num"] + ".png");
 			}
 			$("#pkmn2input").val(pokemon[1]["species"]);
 			updateTable();
@@ -205,7 +251,7 @@ $(document).ready(function() {
   	$( "#pkmn3input" ).on('input', function() {
     	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[2] != undefined) {
     		pokemon[2] = undefined;
-			$("#pkmn3img").attr("src","/wp-content/themes/destro/images/pokemon/icons/0.png");
+			$("#pkmn3img").attr("src","media/pokemon/icons/0.png");
 			updateTable();
     	}
 	});
@@ -216,7 +262,7 @@ $(document).ready(function() {
 			
 			// update image/textbox accordingly
 			if (pokemon[2]["num"] != undefined) {
-				$("#pkmn3img").attr("src","/wp-content/themes/destro/images/pokemon/icons/" + pokemon[2]["num"] + ".png");
+				$("#pkmn3img").attr("src","media/pokemon/icons/" + pokemon[2]["num"] + ".png");
 			}
 			$("#pkmn3input").val(pokemon[2]["species"]);
 			updateTable();
@@ -226,7 +272,7 @@ $(document).ready(function() {
   	$( "#pkmn4input" ).on('input', function() {
     	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[3] != undefined) {
     		pokemon[3] = undefined;
-			$("#pkmn4img").attr("src","/wp-content/themes/destro/images/pokemon/icons/0.png");
+			$("#pkmn4img").attr("src","media/pokemon/icons/0.png");
 			updateTable();
     	}
 	});
@@ -237,7 +283,7 @@ $(document).ready(function() {
 			
 			// update image/textbox accordingly
 			if (pokemon[3]["num"] != undefined) {
-				$("#pkmn4img").attr("src","/wp-content/themes/destro/images/pokemon/icons/" + pokemon[3]["num"] + ".png");
+				$("#pkmn4img").attr("src","media/pokemon/icons/" + pokemon[3]["num"] + ".png");
 			}
 			$("#pkmn4input").val(pokemon[3]["species"]);
 			updateTable();
@@ -247,7 +293,7 @@ $(document).ready(function() {
   	$( "#pkmn5input" ).on('input', function() {
     	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[4] != undefined) {
     		pokemon[4] = undefined;
-			$("#pkmn5img").attr("src","/wp-content/themes/destro/images/pokemon/icons/0.png");
+			$("#pkmn5img").attr("src","media/pokemon/icons/0.png");
 			updateTable();
     	}
 	});
@@ -258,7 +304,7 @@ $(document).ready(function() {
 			
 			// update image/textbox accordingly
 			if (pokemon[4]["num"] != undefined) {
-				$("#pkmn5img").attr("src","/wp-content/themes/destro/images/pokemon/icons/" + pokemon[4]["num"] + ".png");
+				$("#pkmn5img").attr("src","media/pokemon/icons/" + pokemon[4]["num"] + ".png");
 			}
 			$("#pkmn5input").val(pokemon[4]["species"]);
 			updateTable();
@@ -268,7 +314,7 @@ $(document).ready(function() {
   	$( "#pkmn6input" ).on('input', function() {
     	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[5] != undefined) {
     		pokemon[5] = undefined;
-			$("#pkmn6img").attr("src","/wp-content/themes/destro/images/pokemon/icons/0.png");
+			$("#pkmn6img").attr("src","media/pokemon/icons/0.png");
 			updateTable();
     	}
 	});
@@ -279,7 +325,7 @@ $(document).ready(function() {
 			
 			// update image/textbox accordingly
 			if (pokemon[5]["num"] != undefined) {
-				$("#pkmn6img").attr("src","/wp-content/themes/destro/images/pokemon/icons/" + pokemon[5]["num"] + ".png");
+				$("#pkmn6img").attr("src","media/pokemon/icons/" + pokemon[5]["num"] + ".png");
 			}
 			$("#pkmn6input").val(pokemon[5]["species"]);
 			updateTable();
