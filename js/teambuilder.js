@@ -4,12 +4,12 @@ jQuery(function($) {
 // - JTK
 //
 
+var MAX_POKEMON = 6;
 var pokemon = new Array();
 var weakResist = new Array();
 var weakResistColor = new Array();
 var weakResistMaxLength = 6;
 
-// function that returns the pokemon that we're going to look at.
 function fetchPokemon(name) {
 	name = name.toLowerCase();
 	name = name.replace(/[\.\s]/g,"");
@@ -20,11 +20,9 @@ function fetchPokemon(name) {
 // function to parse URL, trying to get different pokemon for linking capabilities
 // regex for numbers: (\d{3}|\d{2}|\d{1})[hwfsmradtozwbp]?
 // what we need to validate for
-//   - number between 1-719
-//   - if rotom (479), no letter = normal; h, w, f, s, c
 //   - if castform (351), no letter = normal; s(unny), r(ainy), f(rost)
 //   - if deoxys (386), no letter = normal; a(ttack), d(efense), s(peed)
-//   - if  wormadam (413),  no letter = grass; s(andy), t(rash)
+//   - if wormadam (413),  no letter = grass; s(andy), t(rash)
 //   - if cherrim (421), no letter = overcast, s(unshine)
 //   - if giratina (487), no letter = altered, o(rigin)
 //   - if shaymin (492), no letter = land, s(ky)
@@ -34,14 +32,14 @@ function fetchPokemon(name) {
 //   - if keldeo (647), r(esolute)
 //   - meloetta (648), p(irouette)
 //   - spiky eared pichu (just do it srsly)
+// 	 ONLY ROTOM WORKS RIGHT NOW
 function parseCurrentURL() {
-	// always load from page, if there's nothing there then we don't care.
 	var currLocation = document.URL;
-	var parArr = currLocation.split("?")[1].split("|");
-	console.log(parArr);
+	var regexFromUrl = currLocation.split("?")[1].split("|");
+	console.log(regexFromUrl);
 
 	// quit if more than six.
-	if (parArr.length > 6) {
+	if (regexFromUrl.length > 6) {
 		console.log("too long");
 		return;
 	}
@@ -49,20 +47,19 @@ function parseCurrentURL() {
 	// quit if we find non number, invalid number
 	var validPokemonRegex = new RegExp(/(\d{3}|\d{2}|\d{1})([hwfscradtozwbp]?)/);
 	var validFormeRegex = new RegExp(/[hwfscradtozwbp]/);
-	for (var i = 0; i < parArr.length; ++i) {
-	 	if (!parArr[i].match(validPokemonRegex)) {
+	for (var i = 0; i < regexFromUrl.length; ++i) {
+	 	if (!regexFromUrl[i].match(validPokemonRegex)) {
 	 		return;
 	 	}
 
-	 	var pkmn = parseInt(parArr[i]);
+	 	var pkmn = parseInt(regexFromUrl[i]);
 	 	console.log(pkmn);
 	 	if (pkmn > 719) {
 	 		return; // THERE AREN'T THAT MANY POKEMON YET
 	 	}
 
-	 	// time to do some forme magic.
 	 	if (pkmn == 479) { // Rotom
-	 		var forme = parArr[i].match(validFormeRegex);
+	 		var forme = regexFromUrl[i].match(validFormeRegex);
 	 		console.log("Forme: " + forme);
 
 	 		var name = "rotom";
@@ -93,6 +90,21 @@ function parseCurrentURL() {
 		}
 		$("#pkmn" + (i + 1) + "input").val(pokemon[i]["species"]);
 	}
+}
+
+// returns the URL based off of the pokemon we have loaded
+function updateLinkForTeam() {
+	var baseURL = document.URL.split("?")[0] + "?";
+	for (var i = 0; i < pokemon.length; ++i) {
+		baseURL += pokemon[i]["num"];
+
+		if (i != pokemon.length -1) {
+			baseURL += "|";
+		}
+	}
+
+	console.log(baseURL);
+	$("#teamUrl").val(baseURL);
 }
 
 function initializeWeakResist() {
@@ -245,133 +257,37 @@ function updateTable() {
 
 $(document).ready(function() {
 	parseCurrentURL();
-
 	updateTable();
+	updateLinkForTeam();
 
-	$( "#pkmn1input" ).on('input', function() {
-    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[0] != undefined) {
-    		pokemon[0] = undefined;
-			$("#pkmn1img").attr("src","media/pokemon/icons/0.png");
-			updateTable();
-    	}
+	$("#teamUrl").tooltip({'container' : 'body', 'placement' : 'bottom'});
+	$("#teamUrl").on("click", function () {
+   		$(this).select();
 	});
-	$("#pkmn1input").autocomplete({
-    	source: pokemon_autocomplete,
-    	select: function (e, ui) {
-			pokemon[0] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\-/g, '')];
 
-			// update image/textbox accordingly
-			if (pokemon[0]["num"] != undefined) {
-				$("#pkmn1img").attr("src","media/pokemon/icons/" + pokemon[0]["num"] + ".png");
-			}
-			$("#pkmn1input").val(pokemon[0]["species"]);
-			updateTable();
-    	}
-  	});
+	for (var i = 1; i <= MAX_POKEMON; ++i) {
+		$( "#pkmn" + i +"input" ).on('input', function() {
+    		if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[i - 1] != undefined) {
+    			pokemon[i - 1] = undefined;
+				$( "#pkmn" + i +"img" ).attr("src","media/pokemon/icons/0.png");
+				updateTable();
+				updateLinkForTeam();
+    		}
+		});
+		$( "#pkmn" + i +"input" ).autocomplete({
+    		source: pokemon_autocomplete,
+    		select: function (e, ui) {
+				pokemon[i - 1] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\-/g, '')];
 
-  	$( "#pkmn2input" ).on('input', function() {
-    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[1] != undefined) {
-    		pokemon[1] = undefined;
-			$("#pkmn2img").attr("src","media/pokemon/icons/0.png");
-			updateTable();
-    	}
-	});
-	$("#pkmn2input").autocomplete({
-    	source: pokemon_autocomplete,
-    	select: function (e, ui) {
-			pokemon[1] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\-/g, '')];
-			
-			// update image/textbox accordingly
-			if (pokemon[1]["num"] != undefined) {
-				$("#pkmn2img").attr("src","media/pokemon/icons/" + pokemon[1]["num"] + ".png");
-			}
-			$("#pkmn2input").val(pokemon[1]["species"]);
-			updateTable();
-    	}
-  	});
-
-  	$( "#pkmn3input" ).on('input', function() {
-    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[2] != undefined) {
-    		pokemon[2] = undefined;
-			$("#pkmn3img").attr("src","media/pokemon/icons/0.png");
-			updateTable();
-    	}
-	});
-	$("#pkmn3input").autocomplete({
-    	source: pokemon_autocomplete,
-    	select: function (e, ui) {
-			pokemon[2] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\-/g, '')];
-			
-			// update image/textbox accordingly
-			if (pokemon[2]["num"] != undefined) {
-				$("#pkmn3img").attr("src","media/pokemon/icons/" + pokemon[2]["num"] + ".png");
-			}
-			$("#pkmn3input").val(pokemon[2]["species"]);
-			updateTable();
-    	}
-  	});
-
-  	$( "#pkmn4input" ).on('input', function() {
-    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[3] != undefined) {
-    		pokemon[3] = undefined;
-			$("#pkmn4img").attr("src","media/pokemon/icons/0.png");
-			updateTable();
-    	}
-	});
-	$("#pkmn4input").autocomplete({
-    	source: pokemon_autocomplete,
-    	select: function (e, ui) {
-			pokemon[3] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\-/g, '')];
-			
-			// update image/textbox accordingly
-			if (pokemon[3]["num"] != undefined) {
-				$("#pkmn4img").attr("src","media/pokemon/icons/" + pokemon[3]["num"] + ".png");
-			}
-			$("#pkmn4input").val(pokemon[3]["species"]);
-			updateTable();
-    	}
-  	});
-
-  	$( "#pkmn5input" ).on('input', function() {
-    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[4] != undefined) {
-    		pokemon[4] = undefined;
-			$("#pkmn5img").attr("src","media/pokemon/icons/0.png");
-			updateTable();
-    	}
-	});
-	$("#pkmn5input").autocomplete({
-    	source: pokemon_autocomplete,
-    	select: function (e, ui) {
-			pokemon[4] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\-/g, '')];
-			
-			// update image/textbox accordingly
-			if (pokemon[4]["num"] != undefined) {
-				$("#pkmn5img").attr("src","media/pokemon/icons/" + pokemon[4]["num"] + ".png");
-			}
-			$("#pkmn5input").val(pokemon[4]["species"]);
-			updateTable();
-    	}
-  	});
-
-  	$( "#pkmn6input" ).on('input', function() {
-    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[5] != undefined) {
-    		pokemon[5] = undefined;
-			$("#pkmn6img").attr("src","media/pokemon/icons/0.png");
-			updateTable();
-    	}
-	});
-	$("#pkmn6input").autocomplete({
-    	source: pokemon_autocomplete,
-    	select: function (e, ui) {
-			pokemon[5] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\-/g, '')];
-			
-			// update image/textbox accordingly
-			if (pokemon[5]["num"] != undefined) {
-				$("#pkmn6img").attr("src","media/pokemon/icons/" + pokemon[5]["num"] + ".png");
-			}
-			$("#pkmn6input").val(pokemon[5]["species"]);
-			updateTable();
-    	}
-  	});
+				// update image/textbox accordingly
+				if (pokemon[i - 1]["num"] != undefined) {
+					$( "#pkmn" + i +"img" ).attr("src","media/pokemon/icons/" + pokemon[i - 1]["num"] + ".png");
+				}
+				$( "#pkmn" + i +"input" ).val(pokemon[i - 1]["species"]);
+				updateTable();
+				updateLinkForTeam();
+    		}
+  		});
+	}
 });
 });
