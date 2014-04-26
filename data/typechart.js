@@ -13,7 +13,7 @@ TypeChart.typechart = {
     Normal: {Normal:0, Fighting:1, Flying:0, Poison:0, Ground:0, Rock:0, Bug:0, Ghost:-3, Steel:0, Fire:0, Water:0, Grass:0, Electric:0, Psychic:0, Ice:0, Dragon:0, Dark:0, Fairy:0},
     Fighting: {Normal:0, Fighting:0, Flying:1, Poison:0, Ground:0, Rock:-1, Bug:-1, Ghost:0, Steel:0, Fire:0, Water:0, Grass:0, Electric:0, Psychic:1, Ice:0, Dragon:0, Dark:-1, Fairy:1},
     Flying: {Normal:0, Fighting:-1, Flying:0, Poison:0, Ground:-3, Rock:1, Bug:-1, Ghost:0, Steel:0, Fire:0, Water:0, Grass:-1, Electric:1, Psychic:0, Ice:1, Dragon:0, Dark:0, Fairy:0},
-    Poison: {Normal:0, Fighting:-1, Flying:0, Poison:-1, Ground:1, Rock:0, Bug:-1, Ghost:0, Steel:0, Fire:0, Water:0, Grass:-1, Electric:0, Psychic:1, Ice:0, Dragon:0, Dark:0, Fairy:0},
+    Poison: {Normal:0, Fighting:-1, Flying:0, Poison:-1, Ground:1, Rock:0, Bug:-1, Ghost:0, Steel:0, Fire:0, Water:0, Grass:-1, Electric:0, Psychic:1, Ice:0, Dragon:0, Dark:0, Fairy:1},
     Ground: {Normal:0, Fighting:0, Flying:0, Poison:-1, Ground:0, Rock:-1, Bug:0, Ghost:0, Steel:0, Fire:0, Water:1, Grass:1, Electric:-3, Psychic:0, Ice:1, Dragon:0, Dark:0, Fairy:0},
     Rock: {Normal:-1, Fighting:1, Flying:-1, Poison:-1, Ground:1, Rock:0, Bug:-1, Ghost:0, Steel:1, Fire:-1, Water:1, Grass:1, Electric:0, Psychic:0, Ice:0, Dragon:0, Dark:0, Fairy:0},
     Bug: {Normal:0, Fighting:-1, Flying:1, Poison:0, Ground:-1, Rock:1, Bug:0, Ghost:0, Steel:0, Fire:1, Water:0, Grass:-1, Electric:0, Psychic:0, Ice:0, Dragon:0, Dark:0, Fairy:0},
