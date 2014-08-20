@@ -8,26 +8,10 @@ var weakResistMaxLength = 6;
 
 function fetchPokemon(name) {
 	name = name.toLowerCase();
-	name = name.replace(/[\.\s]/g,"");
+	name = name.replace(/[\.\s'-]/g,"");
 	return name;
 }
 
-// function to parse URL, trying to get different pokemon for linking capabilities
-// regex for numbers: (\d{3}|\d{2}|\d{1})[hwfsmradtozwbp]?
-// what we need to validate for
-//   - if castform (351), no letter = normal; s(unny), r(ainy), f(rost)
-//   - if deoxys (386), no letter = normal; a(ttack), d(efense), s(peed)
-//   - if wormadam (413),  no letter = grass; s(andy), t(rash)
-//   - if cherrim (421), no letter = overcast, s(unshine)
-//   - if giratina (487), no letter = altered, o(rigin)
-//   - if shaymin (492), no letter = land, s(ky)
-//   - if darmanitan (555), no letter = standard, z(en)
-//   - if tornadus/thundurus/landorus (641/642/645), t(herian)
-//   - if kyurem (646), w(hite) / b(lack)
-//   - if keldeo (647), r(esolute)
-//   - meloetta (648), p(irouette)
-//   - spiky eared pichu (just do it srsly)
-// 	 ONLY ROTOM WORKS RIGHT NOW
 function parseCurrentURL() {
 	var currLocation = document.URL;
 	var regexFromUrl = currLocation.split("?")[1];
@@ -51,7 +35,112 @@ function parseCurrentURL() {
 	 		return;
 	 	}
 
-	 	if (pkmn == 479) {
+	 	if (pkmn == 351) {
+	 		var forme = regexFromUrl[i].match(validFormeRegex);
+	 		var name = "castform"
+	 		if (forme == "s") {
+	 			name += "sunny";
+	 		} else if (forme == "r") {
+	 			name += "rainy";
+	 		} else if (forme == "f") {
+	 			name += "snowy";
+	 		}
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
+	 	} else if (pkmn == 386) {
+	 		var forme = regexFromUrl[i].match(validFormeRegex);
+	 		var name = "deoxys";
+	 		if (forme == "a") {
+	 			name += "attack";
+	 		} else if (forme == "d") {
+	 			name += "defense";
+	 		} else if (forme == "s") {
+	 			name += "speed"
+	 		}
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
+	 	} else if (pkmn == 413) {
+	 		var forme = regexFromUrl[i].match(validFormeRegex);
+	 		var name = "wormadam";
+	 		if (forme == "s") {
+	 			name += "sandy";
+	 		} else if (forme == "t") {
+	 			name += "trash";
+	 		}
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
+	 	} else if (pkmn == 421) {
+	 		var forme = regexFromUrl[i].match(validFormeRegex);
+	 		var name = "cherrim";
+	 		if (forme == "s") {
+	 			name += "sunshine";
+	 		}
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
+	 	} else if (pkmn == 487) {
+	 		var forme = regexFromUrl[i].match(validFormeRegex);
+	 		var name = "giratina";
+	 		if (forme == "o") {
+	 			name += "origin";
+	 		}
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
+	 	} else if (pkmn == 492) {
+	 		var forme = regexFromUrl[i].match(validFormeRegex);
+	 		var name = "shaymin";
+	 		if (forme == "s") {
+	 			name += "sky";
+	 		}
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
+	 	} else if (pkmn == 555) {
+	 		console.log("ugh. darmanitan. seriously???");
+	 		var forme = regexFromUrl[i].match(validFormeRegex);
+	 		var name = "darmanitan";
+	 		if (forme == "z") {
+	 			name += "zen";
+	 		}
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
+	 	} else if (pkmn == 641) {
+	 		var forme = regexFromUrl[i].match(validFormeRegex);
+	 		var name = "tornadus";
+	 		if (forme == "t") {
+	 			name += "therian";
+	 		}
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
+	 	} else if (pkmn == 642) {
+	 		var forme = regexFromUrl[i].match(validFormeRegex);
+	 		var name = "thundurus";
+	 		if (forme == "t") {
+	 			name += "therian";
+	 		}
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
+	 	} else if (pkmn == 643) {
+	 		var forme = regexFromUrl[i].match(validFormeRegex);
+	 		var name = "landorus";
+	 		if (forme == "t") {
+	 			name += "therian";
+	 		}
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
+	 	} else if (pkmn == 646) {
+	 		var forme = regexFromUrl[i].match(validFormeRegex);
+	 		var name = "kyurem";
+	 		if (forme == "w") {
+	 			name += "white";
+	 		} else if (forme == "b") {
+	 			name += "black";
+	 		}
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
+	 	} else if (pkmn == 647) {
+	 		var forme = regexFromUrl[i].match(validFormeRegex);
+	 		var name = "keldeo";
+	 		if (forme == "r") {
+	 			name += "resolute";
+	 		}
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
+	 	} else if (pkmn == 648) {
+	 		var forme = regexFromUrl[i].match(validFormeRegex);
+	 		var name = "meloetta";
+	 		if (forme == "p") {
+	 			name += "pirouette";
+	 		}
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
+	 	}
+	 	else if (pkmn == 479) {
 	 		var forme = regexFromUrl[i].match(validFormeRegex);
 	 		var name = "rotom";
 	 		if (forme == "h") {
@@ -65,10 +154,9 @@ function parseCurrentURL() {
 	 		} else if (forme == "c") {
 	 			name += "mow";
 	 		}
-
 	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
 	 	} else {
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(pokemon_autocomplete[pkmn])];
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(pokemon_url[pkmn - 1])];
 	 	}
 
 		// update image/textbox accordingly
