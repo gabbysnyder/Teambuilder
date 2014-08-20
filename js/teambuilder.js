@@ -5,6 +5,7 @@ var pokemon = new Array();
 var weakResist = new Array();
 var weakResistColor = new Array();
 var weakResistMaxLength = 6;
+var fidgetModeEnabled = false;
 
 function fetchPokemon(name) {
 	name = name.toLowerCase();
@@ -271,8 +272,7 @@ function updateTable() {
 		var totalResist = (totalFourXResists * 2) + totalTwoXResists;
 		var totalWeak = (totalFourXWeaks * 2) + totalTwoXWeaks;
 
-		if ((totalResist == 0) && (totalWeak == 0)) {
-		}
+		if (((totalResist == 0) && (totalWeak == 0)) || fidgetModeEnabled) { }
 		else if (totalResist == totalWeak) {
 			for (var j = 0; j < weakResist[i].length; ++j) {
 				if ((j < 3) && (weakResist[i][j] > 0)) {
@@ -468,5 +468,10 @@ $(document).ready(function() {
 			updateLinkForTeam();
     	}
   	});
+
+	$( "#fidget" ).on('click', function() {
+		fidgetModeEnabled = !fidgetModeEnabled;
+		updateTable();
+	});
 });
 });
