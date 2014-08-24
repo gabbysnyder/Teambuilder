@@ -24,8 +24,8 @@ function parseCurrentURL() {
 		return;
 	}
 
-	var validPokemonRegex = new RegExp(/(\d{3}|\d{2}|\d{1})([hwfscradtozwbp]?)/);
-	var validFormeRegex = new RegExp(/[hwfscradtozwbp]/);
+	var validPokemonRegex = new RegExp(/(\d{3}|\d{2}|\d{1})([hwfscradtozwbpmxy]?)/);
+	var validFormeRegex = new RegExp(/[hwfscradtozwbpmxy]/);
 	for (var i = 0; i < regexFromUrl.length; ++i) {
 	 	if (!regexFromUrl[i].match(validPokemonRegex)) {
 	 		return;
@@ -36,128 +36,17 @@ function parseCurrentURL() {
 	 		return;
 	 	}
 
-	 	if (pkmn == 351) {
-	 		var forme = regexFromUrl[i].match(validFormeRegex);
-	 		var name = "castform"
-	 		if (forme == "s") {
-	 			name += "sunny";
-	 		} else if (forme == "r") {
-	 			name += "rainy";
-	 		} else if (forme == "f") {
-	 			name += "snowy";
+	 	var forme = regexFromUrl[i].match(validFormeRegex);
+	 	var name = pokemon_url[pkmn - 1];
+	 	if (forme) {
+	 		var forme_name = name + forme;
+	 		var pkmn = pokedex.pokemon[fetchPokemon(forme_name)];
+	 		if (pkmn) {
+	 			pokemon[i] = pkmn;
 	 		}
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
-	 	} else if (pkmn == 386) {
-	 		var forme = regexFromUrl[i].match(validFormeRegex);
-	 		var name = "deoxys";
-	 		if (forme == "a") {
-	 			name += "attack";
-	 		} else if (forme == "d") {
-	 			name += "defense";
-	 		} else if (forme == "s") {
-	 			name += "speed"
-	 		}
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
-	 	} else if (pkmn == 413) {
-	 		var forme = regexFromUrl[i].match(validFormeRegex);
-	 		var name = "wormadam";
-	 		if (forme == "s") {
-	 			name += "sandy";
-	 		} else if (forme == "t") {
-	 			name += "trash";
-	 		}
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
-	 	} else if (pkmn == 421) {
-	 		var forme = regexFromUrl[i].match(validFormeRegex);
-	 		var name = "cherrim";
-	 		if (forme == "s") {
-	 			name += "sunshine";
-	 		}
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
-	 	} else if (pkmn == 487) {
-	 		var forme = regexFromUrl[i].match(validFormeRegex);
-	 		var name = "giratina";
-	 		if (forme == "o") {
-	 			name += "origin";
-	 		}
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
-	 	} else if (pkmn == 492) {
-	 		var forme = regexFromUrl[i].match(validFormeRegex);
-	 		var name = "shaymin";
-	 		if (forme == "s") {
-	 			name += "sky";
-	 		}
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
-	 	} else if (pkmn == 555) {
-	 		console.log("ugh. darmanitan. seriously???");
-	 		var forme = regexFromUrl[i].match(validFormeRegex);
-	 		var name = "darmanitan";
-	 		if (forme == "z") {
-	 			name += "zen";
-	 		}
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
-	 	} else if (pkmn == 641) {
-	 		var forme = regexFromUrl[i].match(validFormeRegex);
-	 		var name = "tornadus";
-	 		if (forme == "t") {
-	 			name += "therian";
-	 		}
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
-	 	} else if (pkmn == 642) {
-	 		var forme = regexFromUrl[i].match(validFormeRegex);
-	 		var name = "thundurus";
-	 		if (forme == "t") {
-	 			name += "therian";
-	 		}
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
-	 	} else if (pkmn == 643) {
-	 		var forme = regexFromUrl[i].match(validFormeRegex);
-	 		var name = "landorus";
-	 		if (forme == "t") {
-	 			name += "therian";
-	 		}
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
-	 	} else if (pkmn == 646) {
-	 		var forme = regexFromUrl[i].match(validFormeRegex);
-	 		var name = "kyurem";
-	 		if (forme == "w") {
-	 			name += "white";
-	 		} else if (forme == "b") {
-	 			name += "black";
-	 		}
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
-	 	} else if (pkmn == 647) {
-	 		var forme = regexFromUrl[i].match(validFormeRegex);
-	 		var name = "keldeo";
-	 		if (forme == "r") {
-	 			name += "resolute";
-	 		}
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
-	 	} else if (pkmn == 648) {
-	 		var forme = regexFromUrl[i].match(validFormeRegex);
-	 		var name = "meloetta";
-	 		if (forme == "p") {
-	 			name += "pirouette";
-	 		}
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
 	 	}
-	 	else if (pkmn == 479) {
-	 		var forme = regexFromUrl[i].match(validFormeRegex);
-	 		var name = "rotom";
-	 		if (forme == "h") {
-	 			name += "heat";
-	 		} else if (forme == "w") {
-	 			name += "wash"
-	 		} else if (forme == "f") {
-	 			name += "frost";
-	 		} else if (forme == "s") {
-	 			name += "fan";
-	 		} else if (forme == "c") {
-	 			name += "mow";
-	 		}
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
-	 	} else {
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(pokemon_url[pkmn - 1])];
+	 	if (!pokemon[i]) {
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name_new)];
 	 	}
 
 		// update image/textbox accordingly
@@ -172,10 +61,8 @@ function parseCurrentURL() {
 function updateLinkForTeam() {
 	var baseURL = document.URL.split("?")[0] + "?";
 	for (var i = 0; i < pokemon.length; ++i) {
-		baseURL += pokemon[i]["num"];
-
-		if (i != pokemon.length -1) {
-			baseURL += "|";
+		if (pokemon[i]) {
+			baseURL += "|" + pokemon[i]["num"];
 		}
 	}
 	$("#teamUrl").val(baseURL);
