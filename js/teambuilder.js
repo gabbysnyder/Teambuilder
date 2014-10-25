@@ -246,6 +246,12 @@ function applyMetagameFiltering() {
   	}
 }
 
+function pokemonUpdated() {
+	updateTable();
+	updateLinkForTeam();
+	applyMetagameFiltering();
+}
+
 $(document).ready(function() {
 	parseCurrentURL();
 	pokemonUpdated();
@@ -385,10 +391,4 @@ $(document).ready(function() {
   		applyMetagameFiltering();
   	});
 });
-
-function pokemonUpdated() {
-	updateTable();
-	updateLinkForTeam();
-	applyMetagameFiltering();
-}
 });
