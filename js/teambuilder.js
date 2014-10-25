@@ -227,9 +227,7 @@ function applyMetagameFiltering() {
 			break;
 		default: // no filtering applied
 			for (var i = 0; i < pokemon.length; ++i) {
-				if (pokemon[i] != undefined) {
-					$("#pkmn" + (i + 1) + "valid").html("");
-				}
+				$("#pkmn" + (i + 1) + "valid").html("");
 			}
 			return;
 	}
@@ -242,6 +240,8 @@ function applyMetagameFiltering() {
   			} else {
   				$("#pkmn" + (i + 1) + "valid").html("<i class='fa fa-times' style='color: red;'></i>");
   			}
+  		} else {
+  			$("#pkmn" + (i + 1) + "valid").html("");
   		}
   	}
 }
