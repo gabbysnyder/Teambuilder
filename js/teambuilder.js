@@ -225,7 +225,7 @@ $(document).ready(function() {
    		$(this).select();
 	});
 	$( "#pkmn1input" ).on('input', function() {
-    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[0] != undefined) {
+    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\.|\-|\s/g, '')] == undefined && pokemon[0] != undefined) {
     		pokemon[0] = undefined;
 			$( "#pkmn1img" ).attr("src","media/pokemon/icons/0.png");
 			updateTable();
@@ -235,7 +235,7 @@ $(document).ready(function() {
 	$( "#pkmn1input" ).autocomplete({
     	source: pokemon_autocomplete,
     	select: function (e, ui) {
-			pokemon[0] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\-/g, '')];
+			pokemon[0] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\.|\-|\s/g, '')];
 			// update image/textbox accordingly
 			if (pokemon[0]["num"] != undefined) {
 				$( "#pkmn1img" ).attr("src","media/pokemon/icons/" + pokemon[0]["num"] + ".png");
@@ -246,7 +246,7 @@ $(document).ready(function() {
     	}
   	});
   	$( "#pkmn2input" ).on('input', function() {
-    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[1] != undefined) {
+    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\.|\-|\s/g, '')] == undefined && pokemon[1] != undefined) {
     		pokemon[1] = undefined;
 			$( "#pkmn2img" ).attr("src","media/pokemon/icons/0.png");
 			updateTable();
@@ -256,7 +256,7 @@ $(document).ready(function() {
 	$( "#pkmn2input" ).autocomplete({
     	source: pokemon_autocomplete,
     	select: function (e, ui) {
-			pokemon[1] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\-/g, '')];
+			pokemon[1] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\.|\-|\s/g, '')];
 
 			// update image/textbox accordingly
 			if (pokemon[1]["num"] != undefined) {
@@ -268,7 +268,7 @@ $(document).ready(function() {
     	}
   	});
   	$( "#pkmn3input" ).on('input', function() {
-    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[2] != undefined) {
+    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\.|\-|\s/g, '')] == undefined && pokemon[2] != undefined) {
     		pokemon[2] = undefined;
 			$( "#pkmn3img" ).attr("src","media/pokemon/icons/0.png");
 			updateTable();
@@ -278,7 +278,7 @@ $(document).ready(function() {
 	$( "#pkmn3input" ).autocomplete({
     	source: pokemon_autocomplete,
     	select: function (e, ui) {
-			pokemon[2] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\-/g, '')];
+			pokemon[2] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\.|\-|\s/g, '')];
 
 			// update image/textbox accordingly
 			if (pokemon[2]["num"] != undefined) {
@@ -290,7 +290,7 @@ $(document).ready(function() {
     	}
   	});
   	$( "#pkmn4input" ).on('input', function() {
-    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[3] != undefined) {
+    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\.|\-|\s/g, '')] == undefined && pokemon[3] != undefined) {
     		pokemon[3] = undefined;
 			$( "#pkmn4img" ).attr("src","media/pokemon/icons/0.png");
 			updateTable();
@@ -300,7 +300,7 @@ $(document).ready(function() {
 	$( "#pkmn4input" ).autocomplete({
     	source: pokemon_autocomplete,
     	select: function (e, ui) {
-			pokemon[3] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\-/g, '')];
+			pokemon[3] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\.|\-|\s/g, '')];
 
 			// update image/textbox accordingly
 			if (pokemon[3]["num"] != undefined) {
@@ -312,7 +312,7 @@ $(document).ready(function() {
     	}
   	});
   	$( "#pkmn5input" ).on('input', function() {
-    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[4] != undefined) {
+    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\.|\-|\s/g, '')] == undefined && pokemon[4] != undefined) {
     		pokemon[4] = undefined;
 			$( "#pkmn5img" ).attr("src","media/pokemon/icons/0.png");
 			updateTable();
@@ -322,7 +322,7 @@ $(document).ready(function() {
 	$( "#pkmn5input" ).autocomplete({
     	source: pokemon_autocomplete,
     	select: function (e, ui) {
-			pokemon[4] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\-/g, '')];
+			pokemon[4] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\.|\-|\s/g, '')];
 
 			// update image/textbox accordingly
 			if (pokemon[4]["num"] != undefined) {
@@ -334,7 +334,7 @@ $(document).ready(function() {
     	}
   	});
   	$( "#pkmn6input" ).on('input', function() {
-    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\-/g, '')] == undefined && pokemon[5] != undefined) {
+    	if (pokedex.pokemon[this.value.toLowerCase().replace(/\.|\-|\s/g, '')] == undefined && pokemon[5] != undefined) {
     		pokemon[5] = undefined;
 			$( "#pkmn6img" ).attr("src","media/pokemon/icons/0.png");
 			updateTable();
@@ -344,7 +344,7 @@ $(document).ready(function() {
 	$( "#pkmn6input" ).autocomplete({
     	source: pokemon_autocomplete,
     	select: function (e, ui) {
-			pokemon[5] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\-/g, '')];
+			pokemon[5] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\.|\-|\s/g, '')];
 
 			// update image/textbox accordingly
 			if (pokemon[5]["num"] != undefined) {
