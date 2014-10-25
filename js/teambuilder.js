@@ -6,6 +6,7 @@ var weakResist = new Array();
 var weakResistColor = new Array();
 var weakResistMaxLength = 6;
 var fidgetModeEnabled = false;
+var shouldValidateForMetagame = 0;
 
 function fetchPokemon(name) {
 	name = name.toLowerCase();
@@ -46,7 +47,7 @@ function parseCurrentURL() {
 	 		}
 	 	}
 	 	if (!pokemon[i]) {
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name_new)];
+	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
 	 	}
 
 		// update image/textbox accordingly
@@ -62,7 +63,10 @@ function updateLinkForTeam() {
 	var baseURL = document.URL.split("?")[0] + "?";
 	for (var i = 0; i < pokemon.length; ++i) {
 		if (pokemon[i]) {
-			baseURL += "|" + pokemon[i]["num"];
+			baseURL += pokemon[i]["num"];
+			if (i < pokemon.length - 1) {
+				baseURL += "|";
+			}
 		}
 	}
 	$("#teamUrl").val(baseURL);
@@ -215,10 +219,36 @@ function updateTable() {
 	$("#typeChartResults").html(htmlString);
 }
 
+function applyMetagameFiltering() {
+	var legalityFunction;
+	switch(shouldValidateForMetagame) {
+		case 1: // vgc 14
+			legalityFunction = pokedex.isVGC2014;
+			break;
+		default: // no filtering applied
+			for (var i = 0; i < pokemon.length; ++i) {
+				if (pokemon[i] != undefined) {
+					$("#pkmn" + (i + 1) + "valid").html("");
+				}
+			}
+			return;
+	}
+
+	for (var i = 0; i < pokemon.length; ++i) {
+		if (pokemon[i] != undefined) {
+			var isLegal = legalityFunction(pokemon[i]);
+  			if (isLegal) {
+  				$("#pkmn" + (i + 1) + "valid").html("<i class='fa fa-check' style='color: green'></i>");
+  			} else {
+  				$("#pkmn" + (i + 1) + "valid").html("<i class='fa fa-times' style='color: red;'></i>");
+  			}
+  		}
+  	}
+}
+
 $(document).ready(function() {
 	parseCurrentURL();
-	updateTable();
-	updateLinkForTeam();
+	pokemonUpdated();
 
 	$("#teamUrl").tooltip({'container' : 'body', 'placement' : 'bottom'});
 	$("#teamUrl").on("click", function () {
@@ -228,8 +258,7 @@ $(document).ready(function() {
     	if (pokedex.pokemon[this.value.toLowerCase().replace(/\.|\-|\s/g, '')] == undefined && pokemon[0] != undefined) {
     		pokemon[0] = undefined;
 			$( "#pkmn1img" ).attr("src","media/pokemon/icons/0.png");
-			updateTable();
-			updateLinkForTeam();
+			pokemonUpdated();
     	}
 	});
 	$( "#pkmn1input" ).autocomplete({
@@ -241,16 +270,14 @@ $(document).ready(function() {
 				$( "#pkmn1img" ).attr("src","media/pokemon/icons/" + pokemon[0]["num"] + ".png");
 			}
 			$( "#pkmn1input" ).val(pokemon[0]["species"]);
-			updateTable();
-			updateLinkForTeam();
+			pokemonUpdated();
     	}
   	});
   	$( "#pkmn2input" ).on('input', function() {
     	if (pokedex.pokemon[this.value.toLowerCase().replace(/\.|\-|\s/g, '')] == undefined && pokemon[1] != undefined) {
     		pokemon[1] = undefined;
 			$( "#pkmn2img" ).attr("src","media/pokemon/icons/0.png");
-			updateTable();
-			updateLinkForTeam();
+			pokemonUpdated();
     	}
 	});
 	$( "#pkmn2input" ).autocomplete({
@@ -263,16 +290,14 @@ $(document).ready(function() {
 				$( "#pkmn2img" ).attr("src","media/pokemon/icons/" + pokemon[1]["num"] + ".png");
 			}
 			$( "#pkmn2input" ).val(pokemon[1]["species"]);
-			updateTable();
-			updateLinkForTeam();
+			pokemonUpdated();
     	}
   	});
   	$( "#pkmn3input" ).on('input', function() {
     	if (pokedex.pokemon[this.value.toLowerCase().replace(/\.|\-|\s/g, '')] == undefined && pokemon[2] != undefined) {
     		pokemon[2] = undefined;
 			$( "#pkmn3img" ).attr("src","media/pokemon/icons/0.png");
-			updateTable();
-			updateLinkForTeam();
+			pokemonUpdated();
     	}
 	});
 	$( "#pkmn3input" ).autocomplete({
@@ -285,16 +310,14 @@ $(document).ready(function() {
 				$( "#pkmn3img" ).attr("src","media/pokemon/icons/" + pokemon[2]["num"] + ".png");
 			}
 			$( "#pkmn3input" ).val(pokemon[2]["species"]);
-			updateTable();
-			updateLinkForTeam();
+			pokemonUpdated();
     	}
   	});
   	$( "#pkmn4input" ).on('input', function() {
     	if (pokedex.pokemon[this.value.toLowerCase().replace(/\.|\-|\s/g, '')] == undefined && pokemon[3] != undefined) {
     		pokemon[3] = undefined;
 			$( "#pkmn4img" ).attr("src","media/pokemon/icons/0.png");
-			updateTable();
-			updateLinkForTeam();
+			pokemonUpdated();
     	}
 	});
 	$( "#pkmn4input" ).autocomplete({
@@ -307,16 +330,14 @@ $(document).ready(function() {
 				$( "#pkmn4img" ).attr("src","media/pokemon/icons/" + pokemon[3]["num"] + ".png");
 			}
 			$( "#pkmn4input" ).val(pokemon[3]["species"]);
-			updateTable();
-			updateLinkForTeam();
+			pokemonUpdated();
     	}
   	});
   	$( "#pkmn5input" ).on('input', function() {
     	if (pokedex.pokemon[this.value.toLowerCase().replace(/\.|\-|\s/g, '')] == undefined && pokemon[4] != undefined) {
     		pokemon[4] = undefined;
 			$( "#pkmn5img" ).attr("src","media/pokemon/icons/0.png");
-			updateTable();
-			updateLinkForTeam();
+			pokemonUpdated();
     	}
 	});
 	$( "#pkmn5input" ).autocomplete({
@@ -329,16 +350,14 @@ $(document).ready(function() {
 				$( "#pkmn5img" ).attr("src","media/pokemon/icons/" + pokemon[4]["num"] + ".png");
 			}
 			$( "#pkmn5input" ).val(pokemon[4]["species"]);
-			updateTable();
-			updateLinkForTeam();
+			pokemonUpdated();
     	}
   	});
   	$( "#pkmn6input" ).on('input', function() {
     	if (pokedex.pokemon[this.value.toLowerCase().replace(/\.|\-|\s/g, '')] == undefined && pokemon[5] != undefined) {
     		pokemon[5] = undefined;
 			$( "#pkmn6img" ).attr("src","media/pokemon/icons/0.png");
-			updateTable();
-			updateLinkForTeam();
+			pokemonUpdated();
     	}
 	});
 	$( "#pkmn6input" ).autocomplete({
@@ -351,14 +370,25 @@ $(document).ready(function() {
 				$( "#pkmn6img" ).attr("src","media/pokemon/icons/" + pokemon[5]["num"] + ".png");
 			}
 			$( "#pkmn6input" ).val(pokemon[5]["species"]);
-			updateTable();
-			updateLinkForTeam();
+			pokemonUpdated();
     	}
   	});
 
-	$( "#fidget" ).on('click', function() {
-		fidgetModeEnabled = !fidgetModeEnabled;
-		updateTable();
-	});
+  	$("#vgc14").click(function() {
+  		$("#metagameButtonText").text("VGC 2014");
+  		shouldValidateForMetagame = 1;
+  		applyMetagameFiltering();
+  	});
+  	$("#nofilter").click(function() {
+		$("#metagameButtonText").text("Select Metagame");
+  		shouldValidateForMetagame = 0;
+  		applyMetagameFiltering();
+  	});
 });
+
+function pokemonUpdated() {
+	updateTable();
+	updateLinkForTeam();
+	applyMetagameFiltering();
+}
 });

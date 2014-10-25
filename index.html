@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<script src="js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="css/bootstrap-theme.min.css">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
 	<!-- Custom gabby stuff -->
 	<link rel="stylesheet" href="css/teambuilder.css">
@@ -27,37 +28,43 @@
 			<span class='input-group-addon'>
 				<img id="pkmn1img" src='media/pokemon/icons/0.png'/>
 			</span>
-			<input id="pkmn1input" type="text" class="form-control" placeholder="Pokemon #1">
+			<input id="pkmn1input" type="text" class="form-control" placeholder="Pokemon #1" style="border-right: 0px">
+			<span id="pkmn1valid" class='input-group-addon validationCell'></span>
 		</div>
 		<div class="input-group col-md-12">
 			<span class='input-group-addon'>
 				<img id="pkmn2img" src='media/pokemon/icons/0.png'/>
 			</span>
-			<input id="pkmn2input" type="text" class="form-control" placeholder="Pokemon #2">
+			<input id="pkmn2input" type="text" class="form-control" placeholder="Pokemon #2" style="border-right: 0px">
+			<span id="pkmn2valid" class='input-group-addon validationCell'></span>
 		</div>
 		<div class="input-group col-md-12">
 			<span class='input-group-addon'>
 				<img id="pkmn3img" src='media/pokemon/icons/0.png'/>
 			</span>
-			<input id="pkmn3input" type="text" class="form-control" placeholder="Pokemon #3">
+			<input id="pkmn3input" type="text" class="form-control" placeholder="Pokemon #3" style="border-right: 0px">
+			<span id="pkmn3valid" class='input-group-addon validationCell'></span>
 		</div>
 		<div class="input-group col-md-12">
 			<span class='input-group-addon'>
 				<img id="pkmn4img" src='media/pokemon/icons/0.png'/>
 			</span>
-			<input id="pkmn4input" type="text" class="form-control" placeholder="Pokemon #4">
+			<input id="pkmn4input" type="text" class="form-control" placeholder="Pokemon #4" style="border-right: 0px">
+			<span id="pkmn4valid" class='input-group-addon validationCell'></span>
 		</div>
 		<div class="input-group col-md-12">
 			<span class='input-group-addon'>
 				<img id="pkmn5img" src='media/pokemon/icons/0.png'/>
 			</span>
-			<input id="pkmn5input" type="text" class="form-control" placeholder="Pokemon #5">
+			<input id="pkmn5input" type="text" class="form-control" placeholder="Pokemon #5" style="border-right: 0px">
+			<span id="pkmn5valid" class='input-group-addon validationCell'></span>
 		</div>
 		<div class="input-group col-md-12">
 			<span class='input-group-addon'>
 				<img id="pkmn6img" src='media/pokemon/icons/0.png'/>
 			</span>
-			<input id="pkmn6input" type="text" class="form-control" placeholder="Pokemon #6">
+			<input id="pkmn6input" type="text" class="form-control" placeholder="Pokemon #6" style="border-right: 0px">
+			<span id="pkmn6valid" class='input-group-addon validationCell'></span>
 		</div>
 	</div>
 
@@ -73,8 +80,19 @@
 	</div>
 
 	<div id="fidget-column" class="col-md-3">
-		<div class="input-group col-md-3">
-			<button id="fidget" type="button" class="btn btn-default" data-toggle="button">Enable Fidget Mode</button>
+		<div class="input-group col-md-12">
+			<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+    			<span id="metagameButtonText">Select Metagame</span>
+    			<span class="caret"></span>
+  			</button>
+ 			<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+    			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="vgc14">VGC 2014</a></li>
+   				<li role="presentation" class="divider"></li>
+    			<li role="presentation"><a role="menuitem" tabindex="-1" href="#" id="nofilter">Remove Metagame Filtering</a></li>
+  			</ul>
+			<div style="float: right">
+				<button id="fidget" type="button" class="btn btn-default" data-toggle="button">Enable Fidget Mode</button>
+  			</div>
 		</div>
 	</div>
 

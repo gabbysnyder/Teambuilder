@@ -40,6 +40,17 @@
 			background-color: #9bd54a;
 		}
 
+		.validationCell {
+			width: 25px;
+			background-color: transparent; 
+			border-left: 0px;
+			box-shadow: inset 0 1px 1px -2px rgba(0,0,0,0.075);
+		}
+
+		.form-control {
+			box-shadow: inset 0 1px 1px -2px rgba(0,0,0,0.075);
+		}
+
 		.input-group-addon {
 			padding: 0;
 		}
