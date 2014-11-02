@@ -24,55 +24,99 @@
 <div style="margin: 10px;" class="row col-md-12">
 	<div id="selector-column" class="col-md-3">
 		<!-- Pokemon picker goes here -->
-		<div class="input-group col-md-12">
+		<div id="pkmn1" class="input-group col-md-12 pkmnContainer" moreInfo="hidden">
 			<span class='input-group-addon'>
-				<img id="pkmn1img" src='media/pokemon/icons/0.png'/>
+				<img src='media/pokemon/icons/0.png'/>
 			</span>
-			<input id="pkmn1input" type="text" class="form-control" placeholder="Pokemon #1" style="border-right: 0px">
-			<span id="pkmn1valid" class='input-group-addon validationCell'></span>
+			<input type="text" class="form-control" placeholder="Pokemon #1" style="border-right: 0px" pokemon="0">
+			<span class='input-group-addon validationCell'></span>
 		</div>
-		<div class="input-group col-md-12">
-			<span class='input-group-addon'>
-				<img id="pkmn2img" src='media/pokemon/icons/0.png'/>
-			</span>
-			<input id="pkmn2input" type="text" class="form-control" placeholder="Pokemon #2" style="border-right: 0px">
-			<span id="pkmn2valid" class='input-group-addon validationCell'></span>
+		<div id="pkmn1collapesummary" class="pkmnCollapse">
+			<h6 class="text-center"><small>Ability:</small> Intimidate <small>Moves:</small> Iron Head / Play Rough / Sucker Punch / Protect</h6>
 		</div>
-		<div class="input-group col-md-12">
-			<span class='input-group-addon'>
-				<img id="pkmn3img" src='media/pokemon/icons/0.png'/>
-			</span>
-			<input id="pkmn3input" type="text" class="form-control" placeholder="Pokemon #3" style="border-right: 0px">
-			<span id="pkmn3valid" class='input-group-addon validationCell'></span>
+		<div id="pkmn1collapse" class="pkmnCollapse collapse col-md-12">
+			<select class="form-control">
+  				<option selected="selected">Select Ability</option>
+  				<option>2</option>
+  				<option>3</option>
+  				<option>4</option>
+			</select>
+			<div id="moveContainer">
+				<input class="form-control" placeholder="Move #1">
+				<input class="form-control" placeholder="Move #2">
+				<input class="form-control" placeholder="Move #3">
+				<input class="form-control" placeholder="Move #4">
+			</div>
+			<p class="text-right">Hide more info</a>
 		</div>
-		<div class="input-group col-md-12">
+
+		<div id="pkmn2" class="input-group col-md-12 pkmnContainer" moreInfo="hidden">
 			<span class='input-group-addon'>
-				<img id="pkmn4img" src='media/pokemon/icons/0.png'/>
+				<img src='media/pokemon/icons/0.png'/>
 			</span>
-			<input id="pkmn4input" type="text" class="form-control" placeholder="Pokemon #4" style="border-right: 0px">
-			<span id="pkmn4valid" class='input-group-addon validationCell'></span>
+			<input type="text" class="form-control" placeholder="Pokemon #2" style="border-right: 0px" pokemon="1">
+			<span class='input-group-addon validationCell'></span>
 		</div>
-		<div class="input-group col-md-12">
+
+		<div id="pkmn3" class="input-group col-md-12 pkmnContainer" moreInfo="hidden">
 			<span class='input-group-addon'>
-				<img id="pkmn5img" src='media/pokemon/icons/0.png'/>
+				<img src='media/pokemon/icons/0.png'/>
 			</span>
-			<input id="pkmn5input" type="text" class="form-control" placeholder="Pokemon #5" style="border-right: 0px">
-			<span id="pkmn5valid" class='input-group-addon validationCell'></span>
+			<input type="text" class="form-control" placeholder="Pokemon #3" style="border-right: 0px" pokemon="2">
+			<span class='input-group-addon validationCell'></span>
 		</div>
-		<div class="input-group col-md-12">
+
+		<div id="pkmn4" class="input-group col-md-12 pkmnContainer" moreInfo="hidden">
 			<span class='input-group-addon'>
-				<img id="pkmn6img" src='media/pokemon/icons/0.png'/>
+				<img src='media/pokemon/icons/0.png'/>
 			</span>
-			<input id="pkmn6input" type="text" class="form-control" placeholder="Pokemon #6" style="border-right: 0px">
-			<span id="pkmn6valid" class='input-group-addon validationCell'></span>
+			<input type="text" class="form-control" placeholder="Pokemon #4" style="border-right: 0px" pokemon="3">
+			<span class='input-group-addon validationCell'></span>
+		</div>
+
+		<div id="pkmn5" class="input-group col-md-12 pkmnContainer" moreInfo="hidden">
+			<span class='input-group-addon'>
+				<img src='media/pokemon/icons/0.png'/>
+			</span>
+			<input type="text" class="form-control" placeholder="Pokemon #5" style="border-right: 0px" pokemon="4">
+			<span class='input-group-addon validationCell'></span>
+		</div>
+
+		<div id="pkmn6" class="input-group col-md-12 pkmnContainer" moreInfo="hidden">
+			<span class='input-group-addon'>
+				<img src='media/pokemon/icons/0.png'/>
+			</span>
+			<input type="text" class="form-control" placeholder="Pokemon #6" style="border-right: 0px" pokemon="5">
+			<span class='input-group-addon validationCell'></span>
 		</div>
 	</div>
 
-	<div id="typeChartResults" class="col-md-9" style="float: right;"></div>
+	<!-- try adding tabs here -->
+	<div id="rightHandContainer" class="col-md-9" style="float: right;">
+		<ul class="nav nav-tabs" role="tablist">
+  			<li role="presentation" class="active"><a href="#home" role="tab" data-toggle="tab">Type Resistances</a></li>
+  			<li role="presentation"><a href="#profile" role="tab" data-toggle="tab">Type Coverage</a></li>
+		</ul>
+
+		<!-- Tab panes -->
+		<div class="tab-content">
+  			<div role="tabpanel" class="tab-pane active" id="home">
+  				<div id="typeChartResults" class="col-md-12" style="float: right; padding-top:20px;"></div>
+  				<div class="panel panel-default" style="border-top:none; border-top-left-radius: 0px;">
+  					<div class="panel-body">
+    					Color key goes here.
+  					</div>
+				</div>
+  			</div>
+  			<div role="tabpanel" class="tab-pane" id="profile">
+  				<div class="col-md-12" style="float: right;">Placeholder</div>
+  			</div>
+		</div>
+	</div>
 
 	<div id="url-column" class="col-md-3">
 		<div class="input-group col-md-12">
- 			<span class="input-group-addon">
+ 			<span class="input-group-addon teamUrlAddon">
  				<span class="glyphicon glyphicon-link" style="width: 32px"></span>
  			</span>
 			<input id="teamUrl" type="text" class="form-control" placeholder="Link to this Team" data-toggle="tooltip" title="Link to this Team">

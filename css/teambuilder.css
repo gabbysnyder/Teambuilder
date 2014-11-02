@@ -45,6 +45,7 @@
 			background-color: transparent; 
 			border-left: 0px;
 			box-shadow: inset 0 1px 1px -2px rgba(0,0,0,0.075);
+			padding-right: 1px;
 		}
 
 		.form-control {
@@ -54,9 +55,77 @@
 		.input-group-addon {
 			padding: 0;
 		}
-		.input-group {
-			padding-bottom: 10px;
+		.input-group-addon:not(.teamUrlAddon) {
+			border: 0;
 		}
-		.input-group input {
+		.input-group-addon[moreInfo="shown"], .input-group input[moreInfo="shown"] {
+			border-bottom-right-radius: 0px;
+			border-bottom-left-radius: 0px;
+			border-bottom: 1px solid #ccc;
+		}
+
+		.input-group {
+			margin-bottom: 10px;
+		}
+		.input-group input:not(#teamUrl) {
+			border: 0;
+			border-left: 1px solid #ccc;
+		}
+
+		.pkmnCollapse {
 			border: 1px solid #ccc;
+			border-top: none;
+			border-bottom-right-radius: 4px;
+			border-bottom-left-radius: 4px; 
+			padding-top: 10px;
+			margin-bottom: 10px;
+		}
+
+		.pkmnContainer {
+			border: 1px solid #ccc;
+			border-radius: 4px;
+		}
+		.pkmnContainer[moreInfo="hidden"] {
+			/* hidden only attributes go here */
+		}
+
+		.pkmnContainer[moreInfo="shown"] {
+			margin-bottom: 0px;
+			border-bottom-right-radius: 0px;
+			border-bottom-left-radius: 0px;
+			border-bottom: 0;
+		}
+
+		.pkmnContainer[moreInfo="summary"] {
+			margin-bottom: 0px;
+			border-bottom-right-radius: 0px;
+			border-bottom-left-radius: 0px;
+		}
+
+		.collapse.in {
+			display: table;
+		}
+
+		#moveContainer {
+			border:1px solid #ccc;
+			border-radius: 4px;
+			margin: 10px 0;
+		}
+		#moveContainer input:first-of-type {
+			border-top: 0;
+		}
+		#moveContainer input {
+			border: 0;
+			border-top: 1px solid #ccc;
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+		}
+
+		#pkmn1collapesummary {
+			display: table;
+			width: 100%;
+			display: none;
+		}
+		#pkmn1collapesummary h6 {
+			margin-top: 0;
 		}
