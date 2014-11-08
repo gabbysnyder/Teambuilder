@@ -17,7 +17,10 @@
 	<link rel="stylesheet" href="css/teambuilder.css">
 	<script type='text/javascript' src='data/pokedex.js' defer="defer"></script>
 	<script type='text/javascript' src='data/typechart.js' defer="defer"></script>
+	<script type='text/javascript' src='data/learnsets.js' defer="defer"></script>
+	<script type='text/javascript' src='data/moves.js' defer="defer"></script>
 	<script src="js/teambuilder.js"></script>
+	<script src="data/pokemon.js"></script> <!--move this?-->
 </head>
 
 <body>
@@ -32,22 +35,20 @@
 			<span class='input-group-addon validationCell'></span>
 		</div>
 		<div id="pkmn1collapesummary" class="pkmnCollapse">
-			<h6 class="text-center"><small>Ability:</small> Intimidate <small>Moves:</small> Iron Head / Play Rough / Sucker Punch / Protect</h6>
+			<h6 class="text-center"></h6>
 		</div>
 		<div id="pkmn1collapse" class="pkmnCollapse collapse col-md-12">
-			<select class="form-control">
+			<select class="form-control" pokemon="0">
   				<option selected="selected">Select Ability</option>
-  				<option>2</option>
-  				<option>3</option>
-  				<option>4</option>
 			</select>
 			<div id="moveContainer">
-				<input class="form-control" placeholder="Move #1">
-				<input class="form-control" placeholder="Move #2">
-				<input class="form-control" placeholder="Move #3">
-				<input class="form-control" placeholder="Move #4">
+				<input class="form-control" placeholder="Move #1" pokemon="0" move="0">
+				<input class="form-control" placeholder="Move #2" pokemon="0" move="1">
+				<input class="form-control" placeholder="Move #3" pokemon="0" move="2">
+				<input class="form-control" placeholder="Move #4" pokemon="0" move="3">
 			</div>
-			<p class="text-right">Hide more info</a>
+			<span style="float: left;">Remove</span>
+			<span style="float: right;">Hide more info</span>
 		</div>
 
 		<div id="pkmn2" class="input-group col-md-12 pkmnContainer" moreInfo="hidden">
@@ -109,7 +110,12 @@
 				</div>
   			</div>
   			<div role="tabpanel" class="tab-pane" id="profile">
-  				<div class="col-md-12" style="float: right;">Placeholder</div>
+  				<div id="moveChartResults" class="col-md-12" style="float: right; padding-top:20px;"></div>
+  				<div class="panel panel-default" style="border-top:none; border-top-left-radius: 0px;">
+  					<div class="panel-body">
+    					Color key goes here.
+  					</div>
+				</div>
   			</div>
 		</div>
 	</div>

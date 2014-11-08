@@ -5,6 +5,9 @@ var pokemon = new Array();
 var weakResist = new Array();
 var weakResistColor = new Array();
 var weakResistMaxLength = 6;
+var moveTable = new Array();
+var moveTableColor = new Array();
+var moveTableMaxLength = 5;
 var fidgetModeEnabled = false;
 var shouldValidateForMetagame = 0;
 
@@ -84,6 +87,70 @@ function initializeWeakResist() {
 	}
 }
 
+function updateMovesTable() {
+	for (var i = 0; i < TypeChart.typelookup.length; ++i) {
+		moveTable[i] = new Array();
+		moveTableColor[i] = new Array();
+
+		for (var j = 0; j < moveTableMaxLength; ++j) {
+			moveTable[i][j] = 0;
+			moveTableColor[i][j] = "";
+		}
+	}
+
+	// DOESN'T WORK WITH FLYING PRESS YET
+	for (var i = 0; i < pokemon.length; ++i) {
+		if (pokemon[i] != undefined) {
+			var moveArray = pokemon[i].getMoves();
+			for (move in moveArray) {
+				if (moveArray[move]['category'] == "Status") {
+					break;
+				}
+
+				var typeIdx = TypeChart.typelookup.indexOf(moveArray[move]['type']);
+				if (pokemon[i].moveIsSTAB(moveArray[move])) {
+					var stabIdx = (moveArray[move]['category'] == "Physical") ? 1 : 3;
+					moveTable[typeIdx][stabIdx]++;
+					moveTableColor[typeIdx][stabIdx] = 'green';
+				} else {
+					var stabIdx = (moveArray[move]['category'] == "Physical") ? 0 : 2;
+					moveTable[typeIdx][stabIdx]++;
+					moveTableColor[typeIdx][stabIdx] = 'green';
+				}
+			}
+		}
+	}
+
+	var htmlString = "<table class='table table-condensed table-hover'>\
+		<thead>\
+			<tr>\
+				<th></th>\
+				<th colspan='2'>Physical</th>\
+				<th colspan='2'>Special</th>\
+			</tr>\
+			<tr>\
+				<th></th>\
+				<th>Non-STAB</th>\
+				<th>STAB</th>\
+				<th>Non-STAB</th>\
+				<th>STAB</th>\
+			</tr>\
+		</thead>\
+		<tbody>";
+
+	for (var i = 0; i < TypeChart.typelookup.length; ++i) {
+		htmlString += "<tr>\
+				<th>" + TypeChart.typelookup[i] + "</th>";
+		for (var j = 0; j < moveTableMaxLength - 1; ++j) {
+			htmlString += "<td class='" + moveTableColor[i][j] + "'>" + moveTable[i][j] + "</td>";
+		}
+		htmlString += "</tr>";
+	}
+	htmlString += "</tbody></table>";
+
+	$("#moveChartResults").html(htmlString);
+}
+
 function updateTable() {
 	initializeWeakResist();
 	for (var i = 0; i < pokemon.length; ++i) {
@@ -93,22 +160,30 @@ function updateTable() {
 				finalIndexArray[j] = 3;
 			}
 
-			for (var j = 0; j < pokemon[i]['types'].length; ++j) {
+			var typeArray = pokemon[i].data['types'];
+			for (var j = 0; j < typeArray.length; ++j) {
 				var finalIndexArrayIndex = 0;
-				for (type in TypeChart.typechart[pokemon[i]['types'][j]]) {
+				for (type in TypeChart.typechart[typeArray[j]]) {
 					if (finalIndexArray[finalIndexArrayIndex] > 0) {
-						if (TypeChart.typechart[pokemon[i]['types'][j]][type] == -3) {
+						if (TypeChart.typechart[typeArray[j]][type] == -3) {
 							finalIndexArray[finalIndexArrayIndex] = 0;
 						} else {
-							finalIndexArray[finalIndexArrayIndex] += TypeChart.typechart[pokemon[i]['types'][j]][type];
+							finalIndexArray[finalIndexArrayIndex] += TypeChart.typechart[typeArray[j]][type];
 						}
 					}
 					finalIndexArrayIndex++;
 				}
 			}
 
-			for (var ability in pokemon[i]['abilities']) {
-				switch(pokemon[i]['abilities'][ability]) {
+			var abilityArray;
+			if (pokemon[i].getAbility() != undefined) {
+				abilityArray = new Array(pokemon[i].getAbility());
+			} else {
+				abilityArray = pokemon[i].data['abilities'];
+			}
+
+			for (var ability in abilityArray) {
+				switch(abilityArray[ability]) {
 					case "Dry Skin":
 						finalIndexArray[TypeChart.typelookup.indexOf("Water")] = 0;
 						finalIndexArray[TypeChart.typelookup.indexOf("Fire")] = 5;
@@ -153,6 +228,8 @@ function updateTable() {
 			}
 		}
 	}
+
+	// drawing/shared logic probably starts here...?
 	for (var i = 0; i < weakResist.length; ++i) {
 		var totalFourXResists = weakResist[i][0] + weakResist[i][1];
 		var totalTwoXResists = weakResist[i][2];
@@ -219,6 +296,15 @@ function updateTable() {
 	$("#typeChartResults").html(htmlString);
 }
 
+function updateAbilitiesForPokemon(pokemon, selector) {
+	var abilitiesArray = pokemon.abilities;
+	var keyArray = Object.keys(abilitiesArray);
+	for (var i = 0; i < keyArray.length; ++i) {
+		$(selector + "collapse select").append($("<option></option>").text(abilitiesArray[keyArray[i]])); 
+	}
+
+}
+
 function applyMetagameFiltering() {
 	var legalityFunction;
 	switch(shouldValidateForMetagame) {
@@ -234,7 +320,7 @@ function applyMetagameFiltering() {
 
 	for (var i = 0; i < pokemon.length; ++i) {
 		if (pokemon[i] != undefined) {
-			var isLegal = legalityFunction(pokemon[i]);
+			var isLegal = legalityFunction(pokemon[i].data);
   			if (isLegal) {
   				$("#pkmn" + (i + 1) + " > .validationCell").html("<i class='fa fa-check' style='color: green'></i>");
   			} else {
@@ -250,6 +336,7 @@ function pokemonUpdated() {
 	updateTable();
 	updateLinkForTeam();
 	applyMetagameFiltering();
+	updateMovesTable();
 }
 
 $(document).ready(function() {
@@ -266,7 +353,14 @@ $(document).ready(function() {
 			i = parseInt(this.getAttribute("pokemon"), 10);
     		if (pokedex.pokemon[this.value.toLowerCase().replace(/\.|\-|\s/g, '')] == undefined && pokemon[i] != undefined) {
     			pokemon[i] = undefined;
+
+    			// update UI
 				$( "#pkmn" + (i + 1) + " img" ).attr("src","media/pokemon/icons/0.png");
+				$('#pkmn1collapse').collapse('hide');
+				$('#pkmn1').attr("moreInfo", "hidden");
+				$('#pkmn1 > .input-group-addon').attr("moreInfo", "hidden");
+				$('#pkmn1 input').attr("moreInfo", "hidden");
+
 				pokemonUpdated();
     		}
 		});
@@ -274,31 +368,55 @@ $(document).ready(function() {
     		source: pokemon_autocomplete,
     		select: function (e, ui) {
     			i = parseInt(this.getAttribute("pokemon"), 10);
-				pokemon[i] = pokedex.pokemon[ui.item.value.toLowerCase().replace(/\.|\-|\s/g, '')];
+				pokemon[i] = new Pokemon(pokedex.pokemon[ui.item.value.toLowerCase().replace(/\.|\-|\s/g, '')]);
 				// update image/textbox accordingly
-				if (pokemon[i]["num"] != undefined) {
-					$( "#pkmn" + (i + 1) + " img" ).attr("src","media/pokemon/icons/" + pokemon[i]["num"] + ".png");
+				if (pokemon[i].data["num"] != undefined) {
+					$( "#pkmn" + (i + 1) + " img" ).attr("src","media/pokemon/icons/" + pokemon[i].data["num"] + ".png");
 				}
-				$( "#pkmn" + (i + 1) + " input" ).val(pokemon[i]["species"]);
+				$( "#pkmn" + (i + 1) + " input" ).val(pokemon[i].data["species"]);
 				pokemonUpdated();
+				updateAbilitiesForPokemon(pokemon[i].data, "#pkmn" + (i + 1));
 
 				// UGLY UI UPDATING FOR THE LOVE OF GOD REFACTOR THIS
-				// $('#pkmn1collapse').collapse('show');
-				// $('#pkmn1').attr("moreInfo", "shown");
-				// $('#pkmn1 > .input-group-addon').attr("moreInfo", "shown");
-				// $('#pkmn1 input').attr("moreInfo", "shown");
+				$('#pkmn1collapse').collapse('show');
+				$('#pkmn1').attr("moreInfo", "shown");
+				$('#pkmn1 > .input-group-addon').attr("moreInfo", "shown");
+				$('#pkmn1 input').attr("moreInfo", "shown");
+
+				// attach autocomplete to all moves.
+				$('#pkmn' + (i + 1) + 'collapse #moveContainer input').autocomplete({
+					source: pokemon[i].getAutocompleteArray(),
+					select: function (e, ui) {
+						i = parseInt(this.getAttribute("pokemon"), 10);
+						moveIdx = parseInt(this.getAttribute("move"), 10);
+						pokemon[i].setMoves(ui.item.value.toLowerCase().replace(/\.|\-|\s/g, ''), moveIdx);
+						updateMovesTable();
+					}
+				});
     		}
   		});
 	}
 
+	$( "#pkmn1collapse select" ).on('change', function() {
+		i = parseInt(this.getAttribute("pokemon"), 10);
+		if (this.value == "Select Ability") {
+			pokemon[i].setAbility(undefined);
+		} else {
+			pokemon[i].setAbility(this.value);
+		}
+		pokemonUpdated();
+	});
 
-  	$( "#pkmn1collapse " ).on('click', function() {
+  	$( "#pkmn1collapse span" ).on('click', function() {
+  		// generate new summary
+  		var summaryString = pokemon[0].summary();
+  		$('#pkmn1collapesummary > h6').html( (summaryString != "") ? summaryString : "Click to Expand");
+  		$('#pkmn1collapesummary').css('display', 'table');
+
   		$('#pkmn1collapse').collapse('hide');
   		$('#pkmn1').attr("moreInfo", "summary");
 		$('#pkmn1 > .input-group-addon').attr("moreInfo", "hidden");
 		$('#pkmn1 input').attr("moreInfo", "hidden");
-
-		$('#pkmn1collapesummary').css('display', 'table');
   	});
   	$( "#pkmn1collapesummary" ).on('click', function() {
 		$('#pkmn1collapse').collapse('show');
