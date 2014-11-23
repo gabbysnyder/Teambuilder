@@ -66,6 +66,9 @@
 			border: 0;
 			border-left: 1px solid #ccc;
 		}
+		.input-group input:not(#teamUrl)[moreInfo="shown"] {
+			border-bottom: 1px solid #ccc;
+		}
 
 		.input-group-addon[moreInfo="shown"], 
 		.input-group input[moreInfo="shown"] {
@@ -81,6 +84,9 @@
 			border-bottom-left-radius: 4px; 
 			padding-top: 10px;
 			margin-bottom: 10px;
+		}
+		.pkmnCollapse span {
+			padding-bottom: 10px;
 		}
 
 		.pkmnContainer {
@@ -123,11 +129,15 @@
 			border-top-right-radius: 0;
 		}
 
-		#pkmn1collapesummary {
+		.collapseSummary {
 			display: table;
 			width: 100%;
 			display: none;
 		}
-		#pkmn1collapesummary h6 {
+		.collapseSummary h6 {
 			margin-top: 0;
+		}
+
+		#url-column, #fidget-column, #changelog {
+			padding: 0;
 		}

@@ -47,10 +47,11 @@ Pokemon.prototype.summary = function() {
 			break;
 		}
 
-		movesString += this.moves[i]['name'];
-		if (i < this.moves.length - 1) {
+		if (i > 0) {
 			movesString += " / ";
 		}
+
+		movesString += this.moves[i]['name'];
 	}
 	if (movesString != "") {
 		finalString += "<small>Moves:</small> " + movesString;

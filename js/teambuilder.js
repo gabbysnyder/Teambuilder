@@ -23,7 +23,7 @@ function parseCurrentURL() {
 	if (regexFromUrl == undefined) {
 		return;
 	}
-	regexFromUrl = regexFromUrl.split("|");
+	regexFromUrl = regexFromUrl.split( new RegExp(/\||\%7C/));
 	if (regexFromUrl == undefined || regexFromUrl.length > 6) {
 		return;
 	}
@@ -46,18 +46,21 @@ function parseCurrentURL() {
 	 		var forme_name = name + forme;
 	 		var pkmn = pokedex.pokemon[fetchPokemon(forme_name)];
 	 		if (pkmn) {
-	 			pokemon[i] = pkmn;
+	 			pokemon[i] = new Pokemon(pkmn);
 	 		}
 	 	}
 	 	if (!pokemon[i]) {
-	 		pokemon[i] = pokedex.pokemon[fetchPokemon(name)];
+	 		pokemon[i] = new Pokemon(pokedex.pokemon[fetchPokemon(name)]);
 	 	}
 
 		// update image/textbox accordingly
-		if (pokemon[i]["num"] != undefined) {
-			$("#pkmn" + (i + 1) + " img").attr("src","media/pokemon/icons/" + pokemon[i]["num"] + ".png");
+		if (pokemon[i].data["num"] != undefined) {
+			$("#pkmn" + (i + 1) + " img").attr("src","media/pokemon/icons/" + pokemon[i].data["num"] + ".png");
 		}
-		$("#pkmn" + (i + 1) + " input").val(pokemon[i]["species"]);
+		$("#pkmn" + (i + 1) + " input").val(pokemon[i].data["species"]);
+  		$('#pkmn' + (i + 1) + 'collapsesummary > h6').html("Click to Expand");
+  		$('#pkmn' + (i + 1) + 'collapsesummary').css('display', 'table');
+  		$('#pkmn' + (i + 1)).attr("moreInfo", "summary");
 	}
 }
 
@@ -66,7 +69,7 @@ function updateLinkForTeam() {
 	var baseURL = document.URL.split("?")[0] + "?";
 	for (var i = 0; i < pokemon.length; ++i) {
 		if (pokemon[i]) {
-			baseURL += pokemon[i]["num"];
+			baseURL += pokemon[i].data["num"];
 			if (i < pokemon.length - 1) {
 				baseURL += "|";
 			}
@@ -355,11 +358,13 @@ $(document).ready(function() {
     			pokemon[i] = undefined;
 
     			// update UI
-				$( "#pkmn" + (i + 1) + " img" ).attr("src","media/pokemon/icons/0.png");
-				$('#pkmn1collapse').collapse('hide');
-				$('#pkmn1').attr("moreInfo", "hidden");
-				$('#pkmn1 > .input-group-addon').attr("moreInfo", "hidden");
-				$('#pkmn1 input').attr("moreInfo", "hidden");
+    			$('#pkmn' + (i + 1) + 'collapsesummary').css('display', 'none');
+				$('#pkmn' + (i + 1) + ' img').attr("src","media/pokemon/icons/0.png");
+				$('#pkmn' + (i + 1) + 'collapse').collapse('hide');
+				$('#pkmn' + (i + 1)).attr("moreInfo", "hidden");
+				$('#pkmn' + (i + 1) + ' > .input-group-addon').attr("moreInfo", "hidden");
+				$('#pkmn' + (i + 1) + ' input').attr("moreInfo", "hidden");
+				$("#pkmn" + (i + 1) + "collapse select").empty().append('<option selected="selected">Select Ability</option>');
 
 				pokemonUpdated();
     		}
@@ -378,54 +383,53 @@ $(document).ready(function() {
 				updateAbilitiesForPokemon(pokemon[i].data, "#pkmn" + (i + 1));
 
 				// UGLY UI UPDATING FOR THE LOVE OF GOD REFACTOR THIS
-				$('#pkmn1collapse').collapse('show');
-				$('#pkmn1').attr("moreInfo", "shown");
-				$('#pkmn1 > .input-group-addon').attr("moreInfo", "shown");
-				$('#pkmn1 input').attr("moreInfo", "shown");
+				$('#pkmn' + (i + 1) + 'collapse').collapse('show');
+				$('#pkmn' + (i + 1)).attr("moreInfo", "shown");
+				$('#pkmn' + (i + 1) + ' > .input-group-addon').attr("moreInfo", "shown");
+				$('#pkmn' + (i + 1) + ' input').attr("moreInfo", "shown");
 
 				// attach autocomplete to all moves.
 				$('#pkmn' + (i + 1) + 'collapse #moveContainer input').autocomplete({
 					source: pokemon[i].getAutocompleteArray(),
 					select: function (e, ui) {
-						i = parseInt(this.getAttribute("pokemon"), 10);
+						var j = parseInt(this.parentNode.parentNode.getAttribute("pokemon"), 10);
 						moveIdx = parseInt(this.getAttribute("move"), 10);
-						pokemon[i].setMoves(ui.item.value.toLowerCase().replace(/\.|\-|\s/g, ''), moveIdx);
+						pokemon[j].setMoves(ui.item.value.toLowerCase().replace(/\.|\-|\s/g, ''), moveIdx);
 						updateMovesTable();
 					}
 				});
     		}
   		});
+		$( "#pkmn" + (i + 1) + "collapse select" ).on('change', function() {
+			var j = parseInt(this.parentNode.getAttribute("pokemon"), 10);
+			if (this.value == "Select Ability") {
+				pokemon[j].setAbility(undefined);
+			} else {
+				pokemon[j].setAbility(this.value);
+			}
+			pokemonUpdated();
+		});
+		$( "#pkmn" + (i + 1) + "collapse span" ).on('click', function() {
+  			// generate new summary
+  			var j = parseInt(this.parentNode.getAttribute("pokemon"), 10);
+  			var summaryString = pokemon[j].summary();
+  			$('#pkmn' + (j + 1) + 'collapsesummary > h6').html( (summaryString != "") ? summaryString : "Click to Expand");
+  			$('#pkmn' + (j + 1) + 'collapsesummary').css('display', 'table');
+
+  			$('#pkmn' + (j + 1) + 'collapse').collapse('hide');
+  			$('#pkmn' + (j + 1)).attr("moreInfo", "summary");
+			$('#pkmn' + (j + 1) + ' > .input-group-addon').attr("moreInfo", "hidden");
+			$('#pkmn' + (j + 1) + ' input').attr("moreInfo", "hidden");
+  		});
+  		$( "#pkmn" + (i + 1) + "collapsesummary" ).on('click', function() {
+  			var j = parseInt(this.getAttribute("pokemon"), 10);
+  			$('#pkmn' + (j + 1) + 'collapsesummary').css('display', 'none');
+			$('#pkmn' + (j + 1) + 'collapse').collapse('show');
+			$('#pkmn' + (j + 1)).attr("moreInfo", "shown");
+			$('#pkmn' + (j + 1) + ' > .input-group-addon').attr("moreInfo", "shown");
+			$('#pkmn' + (j + 1) + ' input').attr("moreInfo", "shown");
+  		});
 	}
-
-	$( "#pkmn1collapse select" ).on('change', function() {
-		i = parseInt(this.getAttribute("pokemon"), 10);
-		if (this.value == "Select Ability") {
-			pokemon[i].setAbility(undefined);
-		} else {
-			pokemon[i].setAbility(this.value);
-		}
-		pokemonUpdated();
-	});
-
-  	$( "#pkmn1collapse span" ).on('click', function() {
-  		// generate new summary
-  		var summaryString = pokemon[0].summary();
-  		$('#pkmn1collapesummary > h6').html( (summaryString != "") ? summaryString : "Click to Expand");
-  		$('#pkmn1collapesummary').css('display', 'table');
-
-  		$('#pkmn1collapse').collapse('hide');
-  		$('#pkmn1').attr("moreInfo", "summary");
-		$('#pkmn1 > .input-group-addon').attr("moreInfo", "hidden");
-		$('#pkmn1 input').attr("moreInfo", "hidden");
-  	});
-  	$( "#pkmn1collapesummary" ).on('click', function() {
-		$('#pkmn1collapse').collapse('show');
-		$('#pkmn1').attr("moreInfo", "shown");
-		$('#pkmn1 > .input-group-addon').attr("moreInfo", "shown");
-		$('#pkmn1 input').attr("moreInfo", "shown");
-
-		$('#pkmn1collapesummary').css('display', 'none');
-  	});
 
   	$("#vgc14").click(function() {
   		$("#metagameButtonText").text("VGC 2014");
