@@ -53,6 +53,8 @@ function parseCurrentURL() {
 	 		pokemon[i] = new Pokemon(pokedex.pokemon[fetchPokemon(name)]);
 	 	}
 
+	 	loadPokemonIntoUISlot(i);
+
 		// update image/textbox accordingly
 		if (pokemon[i].data["num"] != undefined) {
 			$("#pkmn" + (i + 1) + " img").attr("src","media/pokemon/icons/" + pokemon[i].data["num"] + ".png");
@@ -335,6 +337,24 @@ function applyMetagameFiltering() {
   	}
 }
 
+function loadPokemonIntoUISlot(uiSlot) {
+	if (pokemon[uiSlot].data["num"] != undefined) {
+		$( "#pkmn" + (uiSlot + 1) + " img" ).attr("src","media/pokemon/icons/" + pokemon[uiSlot].data["num"] + ".png");
+	}
+	updateAbilitiesForPokemon(pokemon[uiSlot].data, "#pkmn" + (uiSlot + 1));
+
+	// attach autocomplete to all moves.
+	$('#pkmn' + (uiSlot + 1) + 'collapse #moveContainer input').autocomplete({
+		source: pokemon[uiSlot].getAutocompleteArray(),
+		select: function (e, ui) {
+			var j = parseInt(this.parentNode.parentNode.getAttribute("pokemon"), 10);
+			moveIdx = parseInt(this.getAttribute("move"), 10);
+			pokemon[j].setMoves(ui.item.value.toLowerCase().replace(/\.|\-|\s/g, ''), moveIdx);
+			updateMovesTable();
+		}
+	});
+}
+
 function pokemonUpdated() {
 	updateTable();
 	updateLinkForTeam();
@@ -365,6 +385,8 @@ $(document).ready(function() {
 				$('#pkmn' + (i + 1) + ' > .input-group-addon').attr("moreInfo", "hidden");
 				$('#pkmn' + (i + 1) + ' input').attr("moreInfo", "hidden");
 				$("#pkmn" + (i + 1) + "collapse select").empty().append('<option selected="selected">Select Ability</option>');
+				$('#pkmn' + (i + 1) + 'collapse #moveContainer input').autocomplete("destroy");
+				$('#pkmn' + (i + 1) + 'collapse #moveContainer input').val("");
 
 				pokemonUpdated();
     		}
@@ -374,30 +396,14 @@ $(document).ready(function() {
     		select: function (e, ui) {
     			i = parseInt(this.getAttribute("pokemon"), 10);
 				pokemon[i] = new Pokemon(pokedex.pokemon[ui.item.value.toLowerCase().replace(/\.|\-|\s/g, '')]);
-				// update image/textbox accordingly
-				if (pokemon[i].data["num"] != undefined) {
-					$( "#pkmn" + (i + 1) + " img" ).attr("src","media/pokemon/icons/" + pokemon[i].data["num"] + ".png");
-				}
 				$( "#pkmn" + (i + 1) + " input" ).val(pokemon[i].data["species"]);
-				pokemonUpdated();
-				updateAbilitiesForPokemon(pokemon[i].data, "#pkmn" + (i + 1));
 
-				// UGLY UI UPDATING FOR THE LOVE OF GOD REFACTOR THIS
+				loadPokemonIntoUISlot(i);
 				$('#pkmn' + (i + 1) + 'collapse').collapse('show');
 				$('#pkmn' + (i + 1)).attr("moreInfo", "shown");
 				$('#pkmn' + (i + 1) + ' > .input-group-addon').attr("moreInfo", "shown");
 				$('#pkmn' + (i + 1) + ' input').attr("moreInfo", "shown");
-
-				// attach autocomplete to all moves.
-				$('#pkmn' + (i + 1) + 'collapse #moveContainer input').autocomplete({
-					source: pokemon[i].getAutocompleteArray(),
-					select: function (e, ui) {
-						var j = parseInt(this.parentNode.parentNode.getAttribute("pokemon"), 10);
-						moveIdx = parseInt(this.getAttribute("move"), 10);
-						pokemon[j].setMoves(ui.item.value.toLowerCase().replace(/\.|\-|\s/g, ''), moveIdx);
-						updateMovesTable();
-					}
-				});
+				pokemonUpdated();
     		}
   		});
 		$( "#pkmn" + (i + 1) + "collapse select" ).on('change', function() {

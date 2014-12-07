@@ -22,21 +22,21 @@
 			font-weight: normal;
 		}
 
-		#typeChartResults .red, #moveChartResults .red {
+		.red {
 			background-color: #c56239;
 		}
 
-		#typeChartResults .strong-red, #moveChartResults .strong-red {
+		.strong-red {
 			color: #F8C9B5;
 			background-color: #9c390f;
 		}
 
-		#typeChartResults .strong-green, #moveChartResults .strong-green {
+		.strong-green {
 			color: #C4E4A0;
 			background-color: #73ac30;
 		}
 
-		#typeChartResults .green, #moveChartResults .green {
+		.green {
 			background-color: #9bd54a;
 		}
 
@@ -140,4 +140,20 @@
 
 		#url-column, #fidget-column, #changelog {
 			padding: 0;
+		}
+
+		#colorKey h5 {
+			margin: 0;
+		}
+
+		#colorKey .square {
+			width: 10px;
+			height: 10px;
+
+			position: absolute;
+			margin: auto;
+			top: 0; left: 0; bottom: 0;
+		}
+		#colorKey .strong-green {
+			background-color: #73ac30;
 		}

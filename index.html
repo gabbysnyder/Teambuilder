@@ -24,7 +24,7 @@
 </head>
 
 <body>
-<div style="margin: 10px;" class="row col-md-12">
+<div style="margin: 10px;" class="container-fluid">
 	<div id="selector-column" class="col-md-3">
 		<!-- Pokemon picker goes here -->
 		<div id="pkmn1" class="input-group col-md-12 pkmnContainer" moreInfo="hidden">
@@ -37,7 +37,7 @@
 		<div id="pkmn1collapsesummary" class="pkmnCollapse collapseSummary" pokemon="0">
 			<h6 class="text-center"></h6>
 		</div>
-		<div id="pkmn1collapse" class="pkmnCollapse collapse col-md-12" pokemon="0">
+		<div id="pkmn1collapse" class="pkmnCollapse collapse col-md-12 col-xs-12" pokemon="0">
 			<select class="form-control">
   				<option selected="selected">Select Ability</option>
 			</select>
@@ -60,7 +60,7 @@
 		<div id="pkmn2collapsesummary" class="pkmnCollapse collapseSummary" pokemon="1">
 			<h6 class="text-center"></h6>
 		</div>
-		<div id="pkmn2collapse" class="pkmnCollapse collapse col-md-12" pokemon="1">
+		<div id="pkmn2collapse" class="pkmnCollapse collapse col-md-12 col-xs-12" pokemon="1">
 			<select class="form-control" pokemon="0">
   				<option selected="selected">Select Ability</option>
 			</select>
@@ -83,7 +83,7 @@
 		<div id="pkmn3collapsesummary" class="pkmnCollapse collapseSummary" pokemon="2">
 			<h6 class="text-center"></h6>
 		</div>
-		<div id="pkmn3collapse" class="pkmnCollapse collapse col-md-12" pokemon="2">
+		<div id="pkmn3collapse" class="pkmnCollapse collapse col-md-12 col-xs-12" pokemon="2">
 			<select class="form-control" pokemon="0">
   				<option selected="selected">Select Ability</option>
 			</select>
@@ -106,7 +106,7 @@
 		<div id="pkmn4collapsesummary" class="pkmnCollapse collapseSummary" pokemon="3">
 			<h6 class="text-center"></h6>
 		</div>
-		<div id="pkmn4collapse" class="pkmnCollapse collapse col-md-12" pokemon="3">
+		<div id="pkmn4collapse" class="pkmnCollapse collapse col-md-12 col-xs-12" pokemon="3">
 			<select class="form-control" pokemon="0">
   				<option selected="selected">Select Ability</option>
 			</select>
@@ -129,7 +129,7 @@
 		<div id="pkmn5collapsesummary" class="pkmnCollapse collapseSummary" pokemon="4">
 			<h6 class="text-center"></h6>
 		</div>
-		<div id="pkmn5collapse" class="pkmnCollapse collapse col-md-12" pokemon="4">
+		<div id="pkmn5collapse" class="pkmnCollapse collapse col-md-12 col-xs-12" pokemon="4">
 			<select class="form-control" pokemon="0">
   				<option selected="selected">Select Ability</option>
 			</select>
@@ -152,7 +152,7 @@
 		<div id="pkmn6collapsesummary" class="pkmnCollapse collapseSummary" pokemon="5">
 			<h6 class="text-center"></h6>
 		</div>
-		<div id="pkmn6collapse" class="pkmnCollapse collapse col-md-12" pokemon="5">
+		<div id="pkmn6collapse" class="pkmnCollapse collapse col-md-12 col-xs-12" pokemon="5">
 			<select class="form-control" pokemon="0">
   				<option selected="selected">Select Ability</option>
 			</select>
@@ -205,7 +205,8 @@
   						<dd>Added VGC 2014 metagame validation - a checkmark will show up next to a pokemon if it's VGC2014 legal, and a x will show up if it's not.</dd>
   						<dd>Added this helpful little updates box.</dd>
 					</dl>
-					<i class='fa fa-heart' style='color: red'></i> JTK
+					<i class='fa fa-heart' style='color: red'></i>JTK
+					</br><small style="text-align: center">found a bug or have a feature request? let me know <a href="https://twitter.com/iBidoof">@iBidoof</a></small>
 				</div>
 			</div>
 		</div>
@@ -224,16 +225,34 @@
   			<div role="tabpanel" class="tab-pane active" id="home">
   				<div id="typeChartResults" class="col-md-12" style="float: right; padding-top:20px;"></div>
   				<div class="panel panel-default" style="border-top:none; border-top-left-radius: 0px;">
-  					<div class="panel-body">
-    					Color key goes here.
+  					<div id="colorKey" class="panel-body">
+    					<div class="col-md-3">
+    						<div class="square strong-green"></div>
+    						<h5 style="display: inline-block;">Definitely Balanced</br><small>Your team has plenty of coverage for this type.</small></h5>
+    					</div>
+    					<div class="col-md-3">
+    						<div class="square green"></div>
+    						<h5 style="display: inline-block;">Probably Balanced</br><small>Your team might be lacking some coverage, but is probably okay.</small></h5>
+    					</div>
+    					<div class="col-md-3">
+    						<div class="square red"></div>
+    						<h5 style="display: inline-block;">Probably Unbalanced</br><small>Your team could be weak in this area - it's worth looking into.</small></h5>
+    					</div>
+    					<div class="col-md-3">
+    						<div class="square strong-red"></div>
+    						<h5 style="display: inline-block;">Definitely Unbalanced</br><small>Your team is missing coverage in this area.</small></h5>
+    					</div>
   					</div>
 				</div>
   			</div>
   			<div role="tabpanel" class="tab-pane" id="profile">
   				<div id="moveChartResults" class="col-md-12" style="float: right; padding-top:20px;"></div>
   				<div class="panel panel-default" style="border-top:none; border-top-left-radius: 0px;">
-  					<div class="panel-body">
-    					Color key goes here.
+  					<div id="colorKey" class="panel-body">
+    					<div class="col-md-3">
+    						<div class="square green"></div>
+    						<h5 style="display: inline-block;">You've got coverage!</br><small>You have a move of this type.</small></h5>
+    					</div>
   					</div>
 				</div>
   			</div>
