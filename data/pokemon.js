@@ -34,6 +34,42 @@ Pokemon.prototype.moveIsSTAB = function(move) {
 	return this.data["types"].indexOf(move["type"]) >= 0;
 }
 
+Pokemon.prototype.urlNumber = function () {
+	var urlNumber;
+
+	var number = this.data["num"];
+	if (number != undefined) {
+		urlNumber = number;
+	} else {
+		return ""; // if the number isn't defined, this isn't a pokemon.
+	}
+
+	var formeLetter = this.data["formeLetter"];
+	if (formeLetter) {
+		urlNumber += formeLetter;
+	}
+
+	return urlNumber;
+}
+
+Pokemon.prototype.getIconImageURL = function() {
+	var imageURL = "media/pokemon/icons/";
+
+	var number = this.data["num"];
+	if (number != undefined) {
+		imageURL += number;
+	} else {
+		return ""; // if the number isn't defined, this isn't a pokemon.
+	}
+
+	var formeLetter = this.data["formeLetter"];
+	if (formeLetter && (number != "493") && (number != "649") && (number != "710") && (number != "711")) { // arceus, genesect don't work right now. Pumpkaboo/Gourgeist shouldn't work ever.
+		imageURL += formeLetter;
+	}
+
+	return imageURL + ".png";
+}
+
 // creates summary string for display
 Pokemon.prototype.summary = function() {
 	var finalString = "";
@@ -69,7 +105,13 @@ Pokemon.prototype.generateAutocompleteList = function() {
 	}
 
 	// THIS WILL FAIL WITH ROTOM/PUNCTUATION FIGURE OUT A BETTER WAY TO DO THIS.
-	var learnset = pokedex.learnsets[this.data["species"].toLowerCase().replace(/\.|\-|\s/g, '')]["learnset"];
+	var pokemon = pokedex.learnsets[this.data["species"].toLowerCase().replace(/\.|\-|\s/g, '')];
+
+	if (!pokemon) {
+		pokemon = pokedex.learnsets[this.data["baseSpecies"].toLowerCase().replace(/\.|\-|\s/g, '')]
+	}
+
+	var learnset = pokemon["learnset"];
 	this.autocomplete = [];
 	for (move in learnset) {
 		this.autocomplete.push(pokedex.moves[move]["name"]);

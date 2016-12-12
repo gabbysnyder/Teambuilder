@@ -11,6 +11,11 @@ var moveTableMaxLength = 5;
 var fidgetModeEnabled = false;
 var shouldValidateForMetagame = 0;
 
+// These are defined globally for simplicity's sake of replacing the forme regex whenever
+// new formes/updates are released.
+var validPokemonRegex = new RegExp(/(\d{3}|\d{2}|\d{1})([MACRBPDLSGHWFOEIZTU]?)/);
+var validFormeRegex = new RegExp(/[MACRBPDLSGHWFOEIZTU]/);
+
 function fetchPokemon(name) {
 	name = name.toLowerCase();
 	name = name.replace(/[\.\s'-]/g,"");
@@ -28,23 +33,30 @@ function parseCurrentURL() {
 		return;
 	}
 
-	var validPokemonRegex = new RegExp(/(\d{3}|\d{2}|\d{1})([hwfscradtozwbpmxy]?)/);
-	var validFormeRegex = new RegExp(/[hwfscradtozwbpmxy]/);
 	for (var i = 0; i < regexFromUrl.length; ++i) {
 	 	if (!regexFromUrl[i].match(validPokemonRegex)) {
 	 		return;
 	 	}
 
 	 	var pkmn = parseInt(regexFromUrl[i]);
-	 	if (pkmn > 719) {
+	 	if (pkmn > 801) { // searches through Magearna
 	 		return;
 	 	}
 
 	 	var forme = regexFromUrl[i].match(validFormeRegex);
 	 	var name = pokemon_url[pkmn - 1];
 	 	if (forme) {
-	 		var forme_name = name + forme;
-	 		var pkmn = pokedex.pokemon[fetchPokemon(forme_name)];
+	 		var pkmnFormeArray = pokedex.pokemon[fetchPokemon(name)]["otherFormes"];
+
+	 		var pkmn;
+	 		for (var formeIdx in pkmnFormeArray) {
+	 			var possiblePokemon = pokedex.pokemon[pkmnFormeArray[formeIdx]];
+	 			if (possiblePokemon != undefined && possiblePokemon["formeLetter"] == forme) {
+	 				pkmn = possiblePokemon;
+	 				break;
+	 			}
+	 		}
+
 	 		if (pkmn) {
 	 			pokemon[i] = new Pokemon(pkmn);
 	 		}
@@ -56,9 +68,7 @@ function parseCurrentURL() {
 	 	loadPokemonIntoUISlot(i);
 
 		// update image/textbox accordingly
-		if (pokemon[i].data["num"] != undefined) {
-			$("#pkmn" + (i + 1) + " img").attr("src","media/pokemon/icons/" + pokemon[i].data["num"] + ".png");
-		}
+		$("#pkmn" + (i + 1) + " img").attr("src", pokemon[i].getIconImageURL());
 		$("#pkmn" + (i + 1) + " input").val(pokemon[i].data["species"]);
   		$('#pkmn' + (i + 1) + 'collapsesummary > h6').html("Click to Expand");
   		$('#pkmn' + (i + 1) + 'collapsesummary').css('display', 'table');
@@ -71,7 +81,7 @@ function updateLinkForTeam() {
 	var baseURL = document.URL.split("?")[0] + "?";
 	for (var i = 0; i < pokemon.length; ++i) {
 		if (pokemon[i]) {
-			baseURL += pokemon[i].data["num"];
+			baseURL += pokemon[i].urlNumber();
 			if (i < pokemon.length - 1) {
 				baseURL += "|";
 			}
@@ -339,7 +349,7 @@ function applyMetagameFiltering() {
 
 function loadPokemonIntoUISlot(uiSlot) {
 	if (pokemon[uiSlot].data["num"] != undefined) {
-		$( "#pkmn" + (uiSlot + 1) + " img" ).attr("src","media/pokemon/icons/" + pokemon[uiSlot].data["num"] + ".png");
+		$( "#pkmn" + (uiSlot + 1) + " img" ).attr("src", pokemon[uiSlot].getIconImageURL());
 	}
 	updateAbilitiesForPokemon(pokemon[uiSlot].data, "#pkmn" + (uiSlot + 1));
 
